@@ -1,0 +1,17 @@
+{
+	"name": "grosharp-theme",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Tailwind-powered WordPress block theme for Grosharp.",
+	"scripts": {
+		"build:css": "tailwindcss -i ./assets/src/css/app.css -o ./assets/build/css/app.css --minify && tailwindcss -i ./assets/src/css/editor.css -o ./assets/build/css/editor.css --minify",
+		"watch:css": "tailwindcss -i ./assets/src/css/app.css -o ./assets/build/css/app.css --watch",
+		"build": "npm run build:css"
+	},
+	"devDependencies": {
+		"autoprefixer": "^10.4.20",
+		"postcss": "^8.4.49",
+		"tailwindcss": "^3.4.17"
+	}
+}
+

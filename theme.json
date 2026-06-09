@@ -1,0 +1,105 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": true,
+		"layout": {
+			"contentSize": "760px",
+			"wideSize": "1180px"
+		},
+		"color": {
+			"custom": false,
+			"customDuotone": false,
+			"customGradient": false,
+			"defaultGradients": false,
+			"defaultPalette": false,
+			"palette": [
+				{ "slug": "primary", "name": "Primary", "color": "#2563EB" },
+				{ "slug": "accent", "name": "Accent", "color": "#22C55E" },
+				{ "slug": "dark", "name": "Dark", "color": "#0B1020" },
+				{ "slug": "ink", "name": "Ink", "color": "#111827" },
+				{ "slug": "muted", "name": "Muted", "color": "#6B7280" },
+				{ "slug": "surface", "name": "Surface", "color": "#FFFFFF" },
+				{ "slug": "soft", "name": "Soft", "color": "#F5F7FB" }
+			]
+		},
+		"spacing": {
+			"spacingScale": {
+				"operator": "*",
+				"increment": 0.25,
+				"steps": 8,
+				"mediumStep": 1.5,
+				"unit": "rem"
+			},
+			"units": [ "px", "rem", "em", "%", "vw", "vh" ]
+		},
+		"typography": {
+			"customFontSize": false,
+			"dropCap": false,
+			"fontFamilies": [
+				{
+					"fontFamily": "var(--grosharp-font-body)",
+					"name": "Body",
+					"slug": "body"
+				},
+				{
+					"fontFamily": "var(--grosharp-font-heading)",
+					"name": "Heading",
+					"slug": "heading"
+				}
+			],
+			"fontSizes": [
+				{ "slug": "small", "name": "Small", "size": "0.875rem" },
+				{ "slug": "base", "name": "Base", "size": "1rem" },
+				{ "slug": "medium", "name": "Medium", "size": "1.125rem" },
+				{ "slug": "large", "name": "Large", "size": "1.5rem" },
+				{ "slug": "x-large", "name": "Extra Large", "size": "2rem" },
+				{ "slug": "display", "name": "Display", "size": "90px" }
+			]
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var(--grosharp-surface)",
+			"text": "var(--grosharp-ink)"
+		},
+		"typography": {
+			"fontFamily": "var(--grosharp-font-body)",
+			"fontSize": "1rem",
+			"lineHeight": "1.65"
+		},
+		"elements": {
+			"button": {
+				"border": {
+					"radius": "999px"
+				},
+				"color": {
+					"background": "var(--grosharp-primary)",
+					"text": "var(--grosharp-surface)"
+				},
+				"typography": {
+					"fontWeight": "700"
+				}
+			},
+			"heading": {
+				"color": {
+					"text": "var(--grosharp-dark)"
+				},
+				"typography": {
+					"fontFamily": "var(--grosharp-font-heading)",
+					"fontWeight": "700",
+					"letterSpacing": "0",
+					"lineHeight": "1.04"
+				}
+			},
+			"link": {
+				"color": {
+					"text": "var(--grosharp-primary)"
+				}
+			}
+		},
+		"spacing": {
+			"blockGap": "1.5rem"
+		}
+	}
+}

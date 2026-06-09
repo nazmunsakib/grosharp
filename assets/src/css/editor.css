@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.editor-styles-wrapper {
+	background: var(--grosharp-surface);
+	color: var(--grosharp-ink);
+	font-family: var(--grosharp-font-body);
+}
+
+.editor-styles-wrapper h1,
+.editor-styles-wrapper h2,
+.editor-styles-wrapper h3,
+.editor-styles-wrapper h4,
+.editor-styles-wrapper h5,
+.editor-styles-wrapper h6 {
+	color: var(--grosharp-dark);
+	font-family: var(--grosharp-font-heading);
+	letter-spacing: 0;
+}
+
+.editor-styles-wrapper .gs-card {
+	border: 1px solid rgb(0 0 0 / 0.10);
+	border-radius: 1.5rem;
+	box-shadow: 0 24px 80px rgb(11 16 32 / 0.10);
+	padding: 1.5rem;
+}
+

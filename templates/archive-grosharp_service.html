@@ -1,0 +1,31 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"gs-section","layout":{"type":"constrained","wideSize":"1180px"}} -->
+<main class="wp-block-group gs-section">
+	<!-- wp:group {"className":"gs-container","layout":{"type":"constrained"}} -->
+	<div class="wp-block-group gs-container">
+		<!-- wp:paragraph {"className":"gs-pill"} -->
+		<p class="gs-pill">Development, design, and marketing</p>
+		<!-- /wp:paragraph -->
+		<!-- wp:heading {"level":1,"style":{"typography":{"fontSize":"clamp(2.5rem, 6vw, 5rem)"}}} -->
+		<h1 class="wp-block-heading" style="font-size:clamp(2.5rem, 6vw, 5rem)">Services built for digital growth.</h1>
+		<!-- /wp:heading -->
+		<!-- wp:query {"queryId":4,"query":{"perPage":12,"pages":0,"offset":0,"postType":"grosharp_service","order":"asc","orderBy":"menu_order","inherit":true},"layout":{"type":"default"}} -->
+		<div class="wp-block-query">
+			<!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
+				<!-- wp:group {"className":"gs-card gs-reveal","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group gs-card gs-reveal">
+					<!-- wp:post-title {"isLink":true,"level":2,"style":{"typography":{"fontSize":"1.5rem"}}} /-->
+					<!-- wp:post-excerpt {"moreText":"Explore service"} /-->
+				</div>
+				<!-- /wp:group -->
+			<!-- /wp:post-template -->
+		</div>
+		<!-- /wp:query -->
+	</div>
+	<!-- /wp:group -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
+

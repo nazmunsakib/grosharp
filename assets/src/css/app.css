@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		background: var(--grosharp-surface);
+		color: var(--grosharp-ink);
+		font-family: var(--grosharp-font-body);
+		text-rendering: optimizeLegibility;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		color: var(--grosharp-dark);
+		font-family: var(--grosharp-font-heading);
+		letter-spacing: 0;
+	}
+
+	a {
+		text-decoration-thickness: 0.08em;
+		text-underline-offset: 0.18em;
+	}
+}
+
+@layer components {
+	.gs-section {
+		@apply py-20 md:py-28;
+	}
+
+	.gs-container {
+		@apply mx-auto w-full max-w-[1180px] px-5 sm:px-6 lg:px-8;
+	}
+
+	.gs-pill {
+		@apply inline-flex items-center gap-2 rounded-control border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-brand-dark shadow-sm;
+	}
+
+	.gs-button-primary {
+		@apply inline-flex min-h-12 items-center justify-center rounded-control bg-brand-primary px-6 py-3 text-sm font-bold text-white no-underline shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:shadow-xl;
+	}
+
+	.gs-button-secondary {
+		@apply inline-flex min-h-12 items-center justify-center rounded-control border border-black/10 bg-white px-6 py-3 text-sm font-bold text-brand-dark no-underline transition hover:-translate-y-0.5 hover:border-brand-primary;
+	}
+
+	.gs-card {
+		@apply rounded-panel border border-black/10 bg-white p-6 shadow-panel;
+	}
+
+	.grosharp-card-grid,
+	.grosharp-stats__grid {
+		@apply grid gap-6 md:grid-cols-3;
+	}
+
+	.grosharp-section-header {
+		@apply mx-auto mb-12 max-w-3xl text-center;
+	}
+
+	.grosharp-section-header h2,
+	.grosharp-cta__inner h2 {
+		@apply text-4xl md:text-6xl;
+	}
+
+	.grosharp-section-header p,
+	.grosharp-cta__inner p {
+		@apply text-lg text-brand-muted;
+	}
+
+	.grosharp-stats__grid .gs-card {
+		@apply rounded-2xl bg-brand-soft p-4;
+	}
+
+	.grosharp-stats strong {
+		@apply block text-3xl font-extrabold text-brand-dark;
+	}
+
+	.grosharp-stats span {
+		@apply text-sm font-semibold text-brand-muted;
+	}
+
+	.grosharp-logo-strip {
+		@apply py-8;
+	}
+
+	.grosharp-logo-strip__inner {
+		@apply flex flex-wrap items-center justify-center gap-4 rounded-panel border border-black/10 bg-white p-5 shadow-sm;
+	}
+
+	.grosharp-logo-strip__inner span {
+		@apply text-sm font-extrabold uppercase tracking-wide text-brand-muted;
+	}
+
+	.grosharp-step-number {
+		@apply mb-5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-dark text-sm font-extrabold text-white;
+	}
+
+	.grosharp-faq__list {
+		@apply mx-auto grid max-w-4xl gap-4;
+	}
+
+	.grosharp-faq summary {
+		@apply cursor-pointer text-lg font-extrabold text-brand-dark;
+	}
+
+	.grosharp-cta__inner {
+		@apply text-center;
+	}
+}
+
+@layer utilities {
+	.gs-reveal {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+
+	.gs-gradient-text {
+		background: linear-gradient(135deg, var(--grosharp-primary), var(--grosharp-accent));
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	.gs-reveal {
+		opacity: 1;
+		transform: none;
+	}
+}
