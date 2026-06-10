@@ -97,34 +97,63 @@
 		});
 	}
 
-	/* ─── Services section ─────────────────────────────────────────────── */
+	/* ─── Services: header entrance ──────────────────────────────────── */
 	function initServicesAnimation() {
 		if (prefersReducedMotion || !gs() || !st()) return;
 		var section = document.querySelector('.grosharp-services');
 		if (!section) return;
 
-		var tl    = makeSectionTl(section);
-		var cards = section.querySelectorAll('article, .gs-card');
-
+		var tl = makeSectionTl(section, 'top 80%');
 		addHeaderReveal(tl, section, 0);
+	}
 
-		if (cards.length) {
-			tl.from(cards, {
-				y: 52, opacity: 0, scale: 0.97,
-				duration: 0.9, ease: 'power3.out',
-				stagger: { amount: 0.42 },
-			}, 0.3);
+	/* ─── Services: horizontal auto-scroll marquee ────────────────────── */
+	function initServicesScroll() {
+		var marquee = document.querySelector('[data-gs-services-marquee]');
+		if (!marquee || !gs() || prefersReducedMotion) return;
+
+		var track     = marquee.querySelector('[data-gs-services-track]');
+		var cardCount = parseInt(marquee.getAttribute('data-card-count') || '0', 10);
+
+		if (!track || !track.children.length) return;
+
+		/* Need at least 4 unique cards before activating the scroll marquee.
+		   With fewer cards the same item fills the screen visibly. */
+		if (cardCount < 4) return;
+
+		var origCards      = Array.prototype.slice.call(track.children);
+		var singleSetWidth = track.scrollWidth;
+		if (singleSetWidth <= 0) return;
+
+		/* Clone until we have at least 3× viewport width so the loop never gaps */
+		var needed = Math.ceil((window.innerWidth * 3) / singleSetWidth);
+		needed = Math.max(needed, 2);
+
+		for (var s = 1; s < needed; s++) {
+			origCards.forEach(function (card) {
+				var clone = card.cloneNode(true);
+				clone.setAttribute('aria-hidden', 'true');
+				clone.querySelectorAll('a, button').forEach(function (el) {
+					el.setAttribute('tabindex', '-1');
+				});
+				track.appendChild(clone);
+			});
 		}
 
-		/* Subtle hover lift on service cards */
-		cards.forEach(function (card) {
-			card.addEventListener('mouseenter', function () {
-				gs().to(card, { y: -5, duration: 0.35, ease: 'power2.out' });
-			});
-			card.addEventListener('mouseleave', function () {
-				gs().to(card, { y: 0, duration: 0.4, ease: 'power2.inOut' });
-			});
+		var tween = gs().to(track, {
+			x: -singleSetWidth,
+			duration: singleSetWidth / 52,
+			ease: 'none',
+			repeat: -1,
+			modifiers: {
+				x: function (v) { return (parseFloat(v) % singleSetWidth) + 'px'; },
+			},
 		});
+
+		marquee.addEventListener('mouseenter', function () { tween.pause(); });
+		marquee.addEventListener('mouseleave', function () { tween.play(); });
+		marquee.addEventListener('focusin',    function () { tween.pause(); });
+		marquee.addEventListener('focusout',   function () { tween.play(); });
 	}
 
 	/* ─── Process steps ────────────────────────────────────────────────── */
@@ -180,24 +209,14 @@
 		});
 	}
 
-	/* ─── Testimonials ──────────────────────────────────────────────────── */
+	/* ─── Testimonials header entrance (Swiper init is inline in render.php) ── */
 	function initTestimonialsAnimation() {
 		if (prefersReducedMotion || !gs() || !st()) return;
 		var section = document.querySelector('.grosharp-testimonials');
 		if (!section) return;
 
-		var tl    = makeSectionTl(section);
-		var cards = section.querySelectorAll('article, .gs-card, blockquote');
-
+		var tl = makeSectionTl(section);
 		addHeaderReveal(tl, section, 0);
-
-		if (cards.length) {
-			tl.from(cards, {
-				y: 48, opacity: 0, scale: 0.97,
-				duration: 0.9, ease: 'power3.out',
-				stagger: { amount: 0.32 },
-			}, 0.3);
-		}
 	}
 
 	/* ─── CTA section ───────────────────────────────────────────────────── */
@@ -247,25 +266,16 @@
 			cards.forEach(function (c) { c.style.opacity = '1'; c.style.transform = 'none'; });
 		}
 
+		/* Image scale on hover — overlay uses CSS group-hover transitions */
 		if (!prefersReducedMotion) {
 			cards.forEach(function (card) {
-				var img     = card.querySelector('[data-gs-project-img]');
-				var overlay = card.querySelector('[data-gs-project-overlay]');
-				var arrow   = card.querySelector('[data-gs-project-arrow]');
-
-				if (overlay) gs().set(overlay, { opacity: 0, y: 24 });
-				if (arrow)   gs().set(arrow,   { scale: 0.7, opacity: 0 });
-
+				var img = card.querySelector('[data-gs-project-img]');
+				if (!img) return;
 				card.addEventListener('mouseenter', function () {
-					if (img)     gs().to(img,     { scale: 1.07, duration: 0.65, ease: 'power2.out' });
-					if (overlay) gs().to(overlay, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' });
-					if (arrow)   gs().to(arrow,   { scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.8)', delay: 0.05 });
+					gs().to(img, { scale: 1.07, duration: 0.65, ease: 'power2.out' });
 				});
-
 				card.addEventListener('mouseleave', function () {
-					if (img)     gs().to(img,     { scale: 1, duration: 0.65, ease: 'power2.inOut' });
-					if (overlay) gs().to(overlay, { opacity: 0, y: 16, duration: 0.35, ease: 'power2.in' });
-					if (arrow)   gs().to(arrow,   { scale: 0.7, opacity: 0, duration: 0.25, ease: 'power2.in' });
+					gs().to(img, { scale: 1, duration: 0.65, ease: 'power2.inOut' });
 				});
 			});
 		}
@@ -304,6 +314,7 @@
 		initHeroVisual();
 		initLogoMarquees();
 		initServicesAnimation();
+		initServicesScroll();
 		initProcessAnimation();
 		initStatsAnimation();
 		initTestimonialsAnimation();
