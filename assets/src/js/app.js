@@ -197,16 +197,25 @@
 		var section = document.querySelector('.grosharp-process');
 		if (!section) return;
 
-		var tl    = makeSectionTl(section);
-		var steps = section.querySelectorAll('[data-gs-step], li, article');
+		var tl     = makeSectionTl(section, 'top 80%');
+		var header = section.querySelector('[data-gs-step-header]');
+		var steps  = section.querySelectorAll('[data-gs-step]');
 
-		addHeaderReveal(tl, section, 0);
+		if (header) {
+			var eyebrow = header.querySelector('[data-gs-eyebrow]');
+			var h2      = header.querySelector('h2');
+			var sub     = header.querySelector('p');
+			if (eyebrow) tl.fromTo(eyebrow, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0);
+			if (h2)      tl.fromTo(h2,      { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power4.out' }, 0.1);
+			if (sub)     tl.fromTo(sub,      { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.24);
+		}
 
 		if (steps.length) {
-			tl.from(steps, {
-				x: -28, opacity: 0, duration: 0.75,
-				ease: 'power3.out', stagger: 0.13,
-			}, 0.32);
+			tl.fromTo(steps,
+				{ y: 40, opacity: 0 },
+				{ y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.12 },
+				0.3
+			);
 		}
 	}
 
