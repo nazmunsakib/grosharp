@@ -1,0 +1,47 @@
+# ── Dependencies ──────────────────────────────────────────────────────────────
+node_modules/
+
+# ── Build artifacts ───────────────────────────────────────────────────────────
+# Keep assets/build/ tracked — the theme needs compiled CSS/JS to work on the
+# server without a local build step. Only exclude generated map files.
+assets/build/**/*.map
+
+# ── OS / editor junk ──────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── IDE / editor config ───────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.nova/
+
+# ── Logs & temp files ─────────────────────────────────────────────────────────
+*.log
+*.tmp
+*.temp
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Environment & secrets ─────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── WordPress ─────────────────────────────────────────────────────────────────
+# Exclude local WP config if ever dropped here by mistake
+wp-config.php
+wp-config-local.php
+
+# ── Misc ──────────────────────────────────────────────────────────────────────
+*.zip
+*.tar.gz
+.cache/

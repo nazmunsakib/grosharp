@@ -20,6 +20,7 @@ add_action(
 		add_theme_support( 'title-tag' );
 		add_theme_support( 'post-thumbnails' );
 		add_theme_support( 'custom-logo' );
+		add_editor_style( 'assets/build/css/app.css' );
 		add_editor_style( 'assets/build/css/editor.css' );
 
 		register_nav_menus(

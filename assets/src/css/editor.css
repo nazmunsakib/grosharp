@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── CSS variable fallbacks for the editor canvas ────────────────────────────
+   These mirror the defaults in settings-css.php. The dynamic values are
+   injected via admin_head in settings-css.php, which overrides these.        */
+:root {
+	--grosharp-primary:      #654cff;
+	--grosharp-accent:       #22C55E;
+	--grosharp-dark:         #0d0d12;
+	--grosharp-ink:          #111827;
+	--grosharp-muted:        #6B7280;
+	--grosharp-surface:      #FFFFFF;
+	--grosharp-soft:         #F5F7FB;
+	--grosharp-font-heading: Figtree, ui-sans-serif, system-ui, sans-serif;
+	--grosharp-font-body:    Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Editor canvas base ────────────────────────────────────────────────────── */
 .editor-styles-wrapper {
 	background: var(--grosharp-surface);
 	color: var(--grosharp-ink);
@@ -16,7 +32,41 @@
 .editor-styles-wrapper h6 {
 	color: var(--grosharp-dark);
 	font-family: var(--grosharp-font-heading);
-	letter-spacing: 0;
+	letter-spacing: -0.02em;
+	line-height: 1.1;
+}
+
+/* ── Disable all transitions/animations in the editor ───────────────────────
+   Prevents GSAP-initiated opacity:0 states from hiding content in preview.   */
+.editor-styles-wrapper *,
+.editor-styles-wrapper *::before,
+.editor-styles-wrapper *::after {
+	animation: none !important;
+	transition-duration: 0s !important;
+}
+
+/* ── Ensure every block is visible regardless of JS animation init state ──── */
+.editor-styles-wrapper [data-gs-project-card],
+.editor-styles-wrapper [data-gs-eyebrow],
+.editor-styles-wrapper [data-gs-hero-visual],
+.editor-styles-wrapper [data-gs-stat],
+.editor-styles-wrapper .gs-reveal {
+	opacity: 1 !important;
+	transform: none !important;
+}
+
+/* ── Shared layout utilities ────────────────────────────────────────────────── */
+.editor-styles-wrapper .gs-container {
+	max-width: 1280px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 1.5rem;
+	padding-right: 1.5rem;
+}
+
+.editor-styles-wrapper .gs-section {
+	padding-top: 5rem;
+	padding-bottom: 5rem;
 }
 
 .editor-styles-wrapper .gs-card {
@@ -26,3 +76,82 @@
 	padding: 1.5rem;
 }
 
+/* ── Hero preview ────────────────────────────────────────────────────────────
+   Make the hero look correct without JS animations.                          */
+.editor-styles-wrapper .grosharp-hero h1 {
+	font-size: clamp(2.5rem, 6vw, 5rem);
+	font-weight: 800;
+	line-height: 1.0;
+	letter-spacing: -0.03em;
+	color: var(--grosharp-dark);
+}
+
+/* ── Dark section overrides ──────────────────────────────────────────────────
+   Stats block and footer use a very dark bg (#0d0d12). Make sure text is
+   readable in the narrow editor canvas.                                       */
+.editor-styles-wrapper .grosharp-stats,
+.editor-styles-wrapper .bg-\[#0d0d12\],
+.editor-styles-wrapper .grosharp-footer {
+	background-color: #0d0d12;
+	color: #ffffff;
+}
+
+.editor-styles-wrapper .grosharp-stats dt,
+.editor-styles-wrapper .grosharp-stats h2 {
+	color: #ffffff;
+	font-family: var(--grosharp-font-heading);
+}
+
+/* ── Project cards — overlay always hidden, img always visible ───────────── */
+.editor-styles-wrapper [data-gs-project-overlay] {
+	display: none !important;
+}
+
+.editor-styles-wrapper [data-gs-project-img] {
+	opacity: 1 !important;
+	transform: none !important;
+}
+
+/* ── Service cards hover lift — skip in editor ───────────────────────────── */
+.editor-styles-wrapper .grosharp-services article:hover {
+	transform: none !important;
+}
+
+/* ── Eyebrow pill ─────────────────────────────────────────────────────────── */
+.editor-styles-wrapper .gs-eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	border-radius: 9999px;
+	border: 1px solid rgb(0 0 0 / 0.12);
+	padding: 0.25rem 0.875rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var(--grosharp-muted);
+}
+
+/* ── Button styles ────────────────────────────────────────────────────────── */
+.editor-styles-wrapper .gs-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	border-radius: 9999px;
+	font-weight: 600;
+	font-size: 0.9375rem;
+	text-decoration: none;
+	transition: none;
+}
+
+.editor-styles-wrapper .gs-btn-primary {
+	background: var(--grosharp-dark);
+	color: #ffffff;
+	padding: 0.875rem 1.75rem;
+}
+
+.editor-styles-wrapper .gs-btn-outline {
+	border: 1.5px solid rgb(0 0 0 / 0.18);
+	color: var(--grosharp-ink);
+	padding: 0.875rem 1.75rem;
+}

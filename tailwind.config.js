@@ -27,8 +27,8 @@ module.exports = {
 				}
 			},
 			fontFamily: {
-				body: ['var(--grosharp-font-body)', 'Switzer', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-				heading: ['var(--grosharp-font-heading)', 'Inter Display', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
+				body: ['var(--grosharp-font-body)', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+				heading: ['var(--grosharp-font-heading)', 'Figtree', 'ui-sans-serif', 'system-ui', 'sans-serif']
 			},
 			borderRadius: {
 				panel: '1.5rem',
