@@ -32,6 +32,21 @@ add_action(
 			grosharp_asset_version( 'assets/build/css/app.css' )
 		);
 
+		wp_enqueue_style(
+			'lenis',
+			'https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.css',
+			array(),
+			'1.1.20'
+		);
+
+		wp_enqueue_script(
+			'lenis',
+			'https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js',
+			array(),
+			'1.1.20',
+			true
+		);
+
 		wp_enqueue_script(
 			'gsap',
 			'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',
@@ -51,7 +66,7 @@ add_action(
 		wp_enqueue_script(
 			'grosharp-app',
 			GROSHARP_THEME_URI . '/assets/build/js/app.js',
-			array( 'gsap', 'gsap-scrolltrigger' ),
+			array( 'lenis', 'gsap', 'gsap-scrolltrigger' ),
 			grosharp_asset_version( 'assets/build/js/app.js' ),
 			true
 		);

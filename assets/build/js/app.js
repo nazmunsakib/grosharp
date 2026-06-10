@@ -8,6 +8,41 @@
 	function gs() { return window.gsap; }
 	function st() { return window.ScrollTrigger; }
 
+	/* ─── Lenis smooth scroll ──────────────────────────────────────────── */
+	function initSmoothScroll() {
+		if (prefersReducedMotion || !window.Lenis) return;
+
+		var lenis = new window.Lenis({
+			duration:   1.25,
+			easing:     function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+			smoothWheel: true,
+			smoothTouch: false,
+		});
+
+		/* Keep ScrollTrigger in sync */
+		if (st()) {
+			lenis.on('scroll', st().update);
+			gs().ticker.add(function (time) { lenis.raf(time * 1000); });
+			gs().ticker.lagSmoothing(0);
+		} else {
+			function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+			requestAnimationFrame(raf);
+		}
+
+		/* Anchor links: let Lenis handle them smoothly */
+		document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+			anchor.addEventListener('click', function (e) {
+				var id  = anchor.getAttribute('href');
+				var target = id && id.length > 1 && document.querySelector(id);
+				if (!target) return;
+				e.preventDefault();
+				lenis.scrollTo(target, { offset: -80, duration: 1.4 });
+			});
+		});
+
+		window.__lenis = lenis;
+	}
+
 	/** Reveal a section's eyebrow → heading → subtext into a running timeline. */
 	function addHeaderReveal(tl, container, offset) {
 		offset = offset || 0;
@@ -310,6 +345,7 @@
 			gs().registerPlugin(st());
 		}
 
+		initSmoothScroll();
 		initHeroEntrance();
 		initHeroVisual();
 		initLogoMarquees();
