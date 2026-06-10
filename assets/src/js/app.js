@@ -244,6 +244,26 @@
 		});
 	}
 
+	/* ─── Latest posts ──────────────────────────────────────────────────── */
+	function initLatestPostsAnimation() {
+		if (prefersReducedMotion || !gs() || !st()) return;
+		var section = document.querySelector('.grosharp-latest-posts');
+		if (!section) return;
+
+		var tl    = makeSectionTl(section, 'top 78%');
+		var cards = section.querySelectorAll('[data-gs-post-card]');
+
+		addHeaderReveal(tl, section, 0);
+
+		if (cards.length) {
+			tl.fromTo(cards,
+				{ y: 48, opacity: 0, scale: 0.97 },
+				{ y: 0,  opacity: 1, scale: 1, duration: 0.88, ease: 'power3.out', stagger: { amount: 0.28 } },
+				0.25
+			);
+		}
+	}
+
 	/* ─── Testimonials header entrance (Swiper init is inline in render.php) ── */
 	function initTestimonialsAnimation() {
 		if (prefersReducedMotion || !gs() || !st()) return;
@@ -353,6 +373,7 @@
 		initServicesScroll();
 		initProcessAnimation();
 		initStatsAnimation();
+		initLatestPostsAnimation();
 		initTestimonialsAnimation();
 		initCTAAnimation();
 		initProjectCards();
