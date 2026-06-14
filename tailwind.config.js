@@ -23,12 +23,15 @@ module.exports = {
 					ink: 'var(--grosharp-ink)',
 					muted: 'var(--grosharp-muted)',
 					surface: 'var(--grosharp-surface)',
-					soft: 'var(--grosharp-soft)'
+					soft: 'var(--grosharp-soft)',
+					violet: 'var(--grosharp-violet)',
+					'violet-soft': 'var(--grosharp-violet-soft)',
+					'violet-glow': 'var(--grosharp-violet-glow)'
 				}
 			},
 			fontFamily: {
-				body: ['var(--grosharp-font-body)', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-				heading: ['var(--grosharp-font-heading)', 'Figtree', 'ui-sans-serif', 'system-ui', 'sans-serif']
+				body: ['var(--grosharp-font-body)', 'DM Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+				heading: ['var(--grosharp-font-heading)', 'Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif']
 			},
 			borderRadius: {
 				panel: '1.5rem',

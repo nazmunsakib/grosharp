@@ -18,9 +18,10 @@ function grosharp_asset_version( string $relative_path ): string {
 add_action(
 	'wp_enqueue_scripts',
 	function () {
+		/* Plus Jakarta Sans (heading) + DM Sans (body) — single Google Fonts request */
 		wp_enqueue_style(
 			'grosharp-fonts',
-			'https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap',
+			'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..500;1,9..40,300..500&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap',
 			array(),
 			null
 		);
@@ -76,9 +77,10 @@ add_action(
 add_action(
 	'enqueue_block_editor_assets',
 	function () {
+		/* Plus Jakarta Sans (heading) + DM Sans (body) — single Google Fonts request */
 		wp_enqueue_style(
 			'grosharp-fonts-editor',
-			'https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap',
+			'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..500;1,9..40,300..500&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap',
 			array(),
 			null
 		);

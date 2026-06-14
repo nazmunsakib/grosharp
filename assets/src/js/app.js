@@ -368,12 +368,161 @@
 		});
 	}
 
+	/* ─── Custom cursor ────────────────────────────────────────────────────
+	   Only activates on pointer:fine devices (mouse).
+	   Dot follows cursor instantly; ring follows with a slight GSAP lag.
+	   Ring expands on hoverable elements, collapses on click.
+	─────────────────────────────────────────────────────────────────────── */
+	function initCustomCursor() {
+		/* Skip touch / reduced-motion */
+		if (prefersReducedMotion) return;
+		if (!window.matchMedia('(pointer: fine)').matches) return;
+		if (!gs()) return;
+
+		/* Create cursor elements */
+		var dot  = document.createElement('div');
+		var ring = document.createElement('div');
+		dot.id  = 'gs-cursor-dot';
+		ring.id = 'gs-cursor-ring';
+		document.body.appendChild(dot);
+		document.body.appendChild(ring);
+		document.body.classList.add('gs-cursor-ready');
+
+		/* GSAP quickTo for fast dot and lagging ring */
+		var dotX  = gs().quickTo(dot,  'x', { duration: 0.08, ease: 'none' });
+		var dotY  = gs().quickTo(dot,  'y', { duration: 0.08, ease: 'none' });
+		var ringX = gs().quickTo(ring, 'x', { duration: 0.38, ease: 'power3.out' });
+		var ringY = gs().quickTo(ring, 'y', { duration: 0.38, ease: 'power3.out' });
+
+		document.addEventListener('mousemove', function (e) {
+			dotX(e.clientX);
+			dotY(e.clientY);
+			ringX(e.clientX);
+			ringY(e.clientY);
+		});
+
+		/* Hover state — expand ring */
+		var hoverSelectors = 'a, button, [role="button"], label, input, select, textarea, .gs-card, [data-gs-project-card], [data-cursor-hover]';
+		document.querySelectorAll(hoverSelectors).forEach(addHoverListeners);
+
+		/* Watch for dynamically added elements */
+		var observer = new MutationObserver(function (mutations) {
+			mutations.forEach(function (m) {
+				m.addedNodes.forEach(function (node) {
+					if (node.nodeType !== 1) return;
+					if (node.matches && node.matches(hoverSelectors)) addHoverListeners(node);
+					node.querySelectorAll && node.querySelectorAll(hoverSelectors).forEach(addHoverListeners);
+				});
+			});
+		});
+		observer.observe(document.body, { childList: true, subtree: true });
+
+		function addHoverListeners(el) {
+			el.addEventListener('mouseenter', function () { document.body.classList.add('gs-cursor-hover'); });
+			el.addEventListener('mouseleave', function () { document.body.classList.remove('gs-cursor-hover'); });
+		}
+
+		/* Click state */
+		document.addEventListener('mousedown', function () { document.body.classList.add('gs-cursor-click'); });
+		document.addEventListener('mouseup',   function () { document.body.classList.remove('gs-cursor-click'); });
+
+		/* Hide cursor when leaving window */
+		document.addEventListener('mouseleave', function () {
+			gs().to([dot, ring], { opacity: 0, duration: 0.3 });
+		});
+		document.addEventListener('mouseenter', function () {
+			gs().to([dot, ring], { opacity: 1, duration: 0.3 });
+		});
+	}
+
+	/* ─── Magnetic buttons ─────────────────────────────────────────────────
+	   On mouse proximity, pull the button toward the cursor.
+	   On mouse leave, spring back to origin.
+	   Applies to .gs-button-primary, .gs-button-secondary, and .wp-block-button__link.
+	─────────────────────────────────────────────────────────────────────── */
+	function initMagneticButtons() {
+		if (prefersReducedMotion || !gs()) return;
+		if (!window.matchMedia('(pointer: fine)').matches) return;
+
+		var STRENGTH   = 0.42;  /* How strongly the button moves (0–1) */
+		var RANGE      = 80;    /* px radius from button center that activates the effect */
+		var RETURN_DUR = 0.65;  /* seconds to snap back */
+
+		var selector = '.gs-button-primary, .gs-button-secondary, .wp-block-button__link';
+
+		document.querySelectorAll(selector).forEach(function (btn) {
+			btn.addEventListener('mousemove', function (e) {
+				var rect    = btn.getBoundingClientRect();
+				var centerX = rect.left + rect.width  / 2;
+				var centerY = rect.top  + rect.height / 2;
+				var distX   = e.clientX - centerX;
+				var distY   = e.clientY - centerY;
+				var dist    = Math.sqrt(distX * distX + distY * distY);
+
+				if (dist < RANGE) {
+					gs().to(btn, {
+						x: distX * STRENGTH,
+						y: distY * STRENGTH,
+						duration: 0.3,
+						ease: 'power3.out',
+						overwrite: 'auto',
+					});
+				}
+			});
+
+			btn.addEventListener('mouseleave', function () {
+				gs().to(btn, {
+					x: 0,
+					y: 0,
+					duration: RETURN_DUR,
+					ease: 'elastic.out(1, 0.45)',
+					overwrite: 'auto',
+				});
+			});
+		});
+	}
+
+	/* ─── Header: scroll-aware background ────────────────────────────────
+	   Header is absolute on page load (transparent over hero).
+	   Once the user scrolls past ~60px, swap to a fixed frosted-glass bar
+	   so it stays visible over page content.
+	─────────────────────────────────────────────────────────────────────── */
+	function initHeaderScroll() {
+		var header = document.querySelector('header.wp-block-group');
+		if (!header) return;
+
+		var THRESHOLD = 60;
+		var scrolled  = false;
+
+		function onScroll() {
+			var past = window.scrollY > THRESHOLD;
+			if (past === scrolled) return;
+			scrolled = past;
+
+			if (past) {
+				header.classList.remove('absolute');
+				header.classList.add('fixed');
+				header.style.paddingTop = '0.5rem';
+			} else {
+				header.classList.remove('fixed');
+				header.classList.add('absolute');
+				header.style.paddingTop = '';
+			}
+		}
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		onScroll(); /* run once on load */
+	}
+
 	/* ─── Boot ──────────────────────────────────────────────────────────── */
 	document.addEventListener('DOMContentLoaded', function () {
 		if (gs() && st()) {
 			gs().registerPlugin(st());
 		}
 
+		initHeaderScroll();
+		initCustomCursor();
+		initMagneticButtons();
 		initSmoothScroll();
 		initHeroEntrance();
 		initHeroVisual();

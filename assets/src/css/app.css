@@ -5,13 +5,18 @@
 @layer base {
 	html {
 		scroll-behavior: smooth;
+		/* Hide default cursor globally when custom cursor is active */
 	}
 
 	body {
 		background: var(--grosharp-surface);
 		color: var(--grosharp-ink);
 		font-family: var(--grosharp-font-body);
+		font-size: 1rem;
+		line-height: 1.65;
 		text-rendering: optimizeLegibility;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
 	}
 
 	h1,
@@ -22,38 +27,79 @@
 	h6 {
 		color: var(--grosharp-dark);
 		font-family: var(--grosharp-font-heading);
-		letter-spacing: 0;
+		font-optical-sizing: auto;
+		font-weight: 700;
+		line-height: 1.04;
+		letter-spacing: -0.03em;
+	}
+
+	/* Larger display headings get even tighter tracking */
+	h1 {
+		letter-spacing: -0.04em;
+		line-height: 1.0;
+	}
+
+	h2 {
+		letter-spacing: -0.035em;
+		line-height: 1.04;
+	}
+
+	h3 {
+		letter-spacing: -0.025em;
+		line-height: 1.15;
+	}
+
+	h4, h5, h6 {
+		letter-spacing: -0.02em;
+		line-height: 1.3;
+	}
+
+	p {
+		max-width: 68ch;
 	}
 
 	a {
 		text-decoration-thickness: 0.08em;
 		text-underline-offset: 0.18em;
 	}
+
+	/* Selection colour */
+	::selection {
+		background: var(--grosharp-violet);
+		color: #fff;
+	}
+
+	/* Focus ring — accessible and on-brand */
+	:focus-visible {
+		outline: 2px solid var(--grosharp-violet);
+		outline-offset: 3px;
+		border-radius: 4px;
+	}
 }
 
 @layer components {
 	.gs-section {
-		@apply py-20 md:py-28;
+		@apply py-24 md:py-32;
 	}
 
 	.gs-container {
-		@apply mx-auto w-full max-w-[1240px] px-5 sm:px-6 lg:px-8;
+		@apply mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10;
 	}
 
 	.gs-pill {
-		@apply inline-flex items-center gap-2 rounded-control border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-brand-dark shadow-sm;
+		@apply inline-flex items-center gap-2 rounded-control border border-black/[0.08] bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-brand-dark shadow-sm;
 	}
 
 	.gs-button-primary {
-		@apply inline-flex min-h-12 items-center justify-center rounded-control bg-brand-primary px-6 py-3 text-sm font-bold text-white no-underline shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:shadow-xl;
+		@apply inline-flex min-h-[52px] items-center justify-center rounded-control bg-brand-violet px-7 py-3 font-body text-[15px] font-semibold text-white no-underline shadow-[0_18px_48px_rgba(101,76,255,0.38),inset_0_-2px_0_rgba(0,0,0,0.14)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_24px_60px_rgba(101,76,255,0.45)];
 	}
 
 	.gs-button-secondary {
-		@apply inline-flex min-h-12 items-center justify-center rounded-control border border-black/10 bg-white px-6 py-3 text-sm font-bold text-brand-dark no-underline transition hover:-translate-y-0.5 hover:border-brand-primary;
+		@apply inline-flex min-h-[52px] items-center justify-center rounded-control border border-black/[0.08] bg-white/80 px-7 py-3 font-body text-[15px] font-semibold text-brand-dark no-underline shadow-[0_4px_20px_rgba(101,76,255,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-violet/30 hover:bg-white hover:shadow-[0_8px_32px_rgba(101,76,255,0.12)];
 	}
 
 	.gs-card {
-		@apply rounded-panel border border-black/10 bg-white p-6 shadow-panel;
+		@apply rounded-panel border border-black/[0.07] bg-white p-6 shadow-panel transition-shadow duration-300 hover:shadow-[0_32px_80px_rgba(11,16,32,0.12)];
 	}
 
 	.grosharp-card-grid,
@@ -114,6 +160,23 @@
 	.grosharp-cta__inner {
 		@apply text-center;
 	}
+
+	/* Header CTA button — compact size, overrides gs-button-primary defaults */
+	header .wp-block-button__link {
+		@apply !min-h-0 !px-4 !py-2 !text-[13px];
+	}
+
+	/* Hero section background — smooth violet glow, fades to nothing at both edges */
+	.grosharp-hero {
+		background: linear-gradient(
+			180deg,
+			rgba(101, 76, 255, 0)   0%,
+			rgba(101, 76, 255, 0.06) 25%,
+			rgba(101, 76, 255, 0.12) 50%,
+			rgba(101, 76, 255, 0.06) 75%,
+			rgba(101, 76, 255, 0)   100%
+		) !important;
+	}
 }
 
 @layer utilities {
@@ -123,11 +186,75 @@
 	}
 
 	.gs-gradient-text {
-		background: linear-gradient(135deg, var(--grosharp-primary), var(--grosharp-accent));
+		background: linear-gradient(135deg, var(--grosharp-violet), #a78bfa);
 		-webkit-background-clip: text;
 		background-clip: text;
 		color: transparent;
 	}
+}
+
+/* ── Custom cursor ───────────────────────────────────────────────────────── */
+/* Only shown on devices with a fine pointer (mouse) */
+@media (pointer: fine) {
+	body.gs-cursor-ready {
+		cursor: none;
+	}
+
+	body.gs-cursor-ready a,
+	body.gs-cursor-ready button,
+	body.gs-cursor-ready [role="button"],
+	body.gs-cursor-ready label,
+	body.gs-cursor-ready input,
+	body.gs-cursor-ready select,
+	body.gs-cursor-ready textarea {
+		cursor: none;
+	}
+}
+
+#gs-cursor-dot,
+#gs-cursor-ring {
+	position: fixed;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: 99999;
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	will-change: transform;
+	transition: opacity 0.3s;
+}
+
+#gs-cursor-dot {
+	width: 7px;
+	height: 7px;
+	background: var(--grosharp-violet);
+}
+
+#gs-cursor-ring {
+	width: 32px;
+	height: 32px;
+	border: 1.5px solid var(--grosharp-violet);
+	opacity: 0.55;
+	transition: width 0.25s ease, height 0.25s ease, opacity 0.3s, border-color 0.25s;
+}
+
+/* Hover state: ring expands */
+body.gs-cursor-hover #gs-cursor-ring {
+	width: 48px;
+	height: 48px;
+	opacity: 0.35;
+	border-color: var(--grosharp-violet);
+}
+
+/* Click state */
+body.gs-cursor-click #gs-cursor-dot {
+	transform: translate(-50%, -50%) scale(0.7);
+}
+
+body.gs-cursor-click #gs-cursor-ring {
+	width: 24px;
+	height: 24px;
+	opacity: 0.6;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -138,5 +265,10 @@
 	.gs-reveal {
 		opacity: 1;
 		transform: none;
+	}
+
+	#gs-cursor-dot,
+	#gs-cursor-ring {
+		display: none;
 	}
 }
