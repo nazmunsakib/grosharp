@@ -19,7 +19,7 @@ function grosharp_get_brand_settings(): array {
 		'dark_color'    => '#09090F',
 		'ink_color'     => '#111827',
 		'muted_color'   => '#6B7280',
-		'surface_color' => '#FAFAF9',
+		'surface_color' => '#FFFFFF',
 		'soft_color'    => '#F4F3FF',
 		'heading_font'  => 'Plus Jakarta Sans',
 		'body_font'     => 'DM Sans',

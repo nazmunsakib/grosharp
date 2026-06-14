@@ -69,43 +69,34 @@
 		var hero = document.querySelector('.grosharp-hero');
 		if (!hero) return;
 
+		/* Immediately make all gs-reveal elements inside hero visible
+		   so initRevealAnimations() doesn't re-animate them */
+		hero.querySelectorAll('.gs-reveal').forEach(function (el) {
+			el.style.opacity  = '1';
+			el.style.transform = 'none';
+		});
+
 		var tl      = gs().timeline({ delay: 0.1 });
 		var eyebrow = hero.querySelector('[data-gs-eyebrow]');
 		var h1      = hero.querySelector('h1');
 		var body    = h1 && h1.nextElementSibling;
 		var ctas    = hero.querySelectorAll('[data-gs-hero-cta], .gs-btn');
 		var visual  = hero.querySelector('[data-gs-hero-visual]');
-		var badges  = hero.querySelectorAll('[data-gs-hero-badge]');
 
 		if (eyebrow) tl.from(eyebrow, { y: 20, opacity: 0, duration: 0.65, ease: 'power3.out' }, 0);
 		if (h1)      tl.from(h1,      { y: 52, opacity: 0, duration: 1.15, ease: 'power4.out' }, 0.1);
 		if (body && body.matches('p')) {
 			tl.from(body, { y: 28, opacity: 0, duration: 0.8, ease: 'power3.out' }, 0.32);
 		}
-		if (ctas.length)   tl.from(ctas,   { y: 20, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1 }, 0.48);
-		if (visual)        tl.from(visual,  { y: 48, opacity: 0, scale: 0.96, duration: 1.25, ease: 'power4.out' }, 0.18);
-		if (badges.length) tl.from(badges,  { y: 16, opacity: 0, duration: 0.65, ease: 'back.out(1.5)', stagger: 0.12 }, 0.58);
+		if (ctas.length) tl.from(ctas, { y: 20, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1 }, 0.48);
+
+		/* Visual: no animation — static display only */
 	}
 
-	/* ─── Hero visual: ambient float + scroll parallax ─────────────────── */
+	/* ─── Hero visual: entrance only, no continuous motion ─────────────── */
 	function initHeroVisual() {
-		if (prefersReducedMotion || !gs()) return;
-		var visual = document.querySelector('[data-gs-hero-visual]');
-		if (!visual) return;
-
-		gs().to(visual, { y: -14, duration: 3.5, ease: 'sine.inOut', repeat: -1, yoyo: true });
-
-		if (st()) {
-			st().create({
-				trigger: '.grosharp-hero',
-				start: 'top top',
-				end: 'bottom top',
-				scrub: 1.4,
-				onUpdate: function (self) {
-					gs().set(visual, { y: -14 + self.progress * -55 });
-				},
-			});
-		}
+		/* Intentionally empty — float and parallax removed to prevent shaking.
+		   The hero visual animates in via initHeroEntrance() only. */
 	}
 
 	/* ─── Logo marquee ─────────────────────────────────────────────────── */
@@ -357,6 +348,9 @@
 		}
 
 		gs().utils.toArray('.gs-reveal').forEach(function (el) {
+			/* Hero handles its own reveals — skip to avoid double-animation */
+			if (el.closest('.grosharp-hero')) return;
+
 			gs().fromTo(
 				el,
 				{ opacity: 0, y: 28 },

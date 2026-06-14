@@ -166,15 +166,13 @@
 		@apply !min-h-0 !px-4 !py-2 !text-[13px];
 	}
 
-	/* Hero section background — smooth violet glow, fades to nothing at both edges */
+	/* Hero section background */
 	.grosharp-hero {
 		background: linear-gradient(
 			180deg,
-			rgba(101, 76, 255, 0)   0%,
-			rgba(101, 76, 255, 0.06) 25%,
-			rgba(101, 76, 255, 0.12) 50%,
-			rgba(101, 76, 255, 0.06) 75%,
-			rgba(101, 76, 255, 0)   100%
+			rgba(255, 255, 255, 1)     0%,
+			rgba(172, 137, 242, 0.83) 40%,
+			rgba(255, 255, 255, 1)    80%
 		) !important;
 	}
 }
