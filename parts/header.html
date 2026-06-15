@@ -2,28 +2,16 @@
 <header class="wp-block-group absolute left-0 top-0 z-50 w-full border-0 bg-transparent pt-3">
 	<!-- wp:group {"className":"mx-auto flex min-h-[44px] w-full max-w-[860px] items-center justify-between rounded-full border border-black/[0.09] bg-white/80 py-1.5 pl-4 pr-2 shadow-[0_8px_32px_rgba(101,76,255,0.09)] backdrop-blur-xl","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
 	<div class="wp-block-group mx-auto flex min-h-[44px] w-full max-w-[860px] items-center justify-between rounded-full border border-black/[0.09] bg-white/80 py-1.5 pl-4 pr-2 shadow-[0_8px_32px_rgba(101,76,255,0.09)] backdrop-blur-xl">
-		<!-- wp:group {"className":"font-heading text-[16px] font-black text-brand-dark","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center","gap":"8px"}} -->
-		<div class="wp-block-group font-heading text-[16px] font-black text-brand-dark">
-			<!-- wp:site-logo {"width":30,"shouldSyncIcon":true} /-->
-			<!-- wp:site-title {"level":0,"style":{"typography":{"fontWeight":"900","textDecoration":"none"}}} /-->
-		</div>
-		<!-- /wp:group -->
 
-		<!-- wp:navigation {"className":"hidden rounded-full bg-[#f7f5ff] px-3 py-1.5 text-[16px] font-semibold text-brand-dark lg:flex","overlayMenu":"mobile","layout":{"type":"flex","justifyContent":"center","orientation":"horizontal"},"style":{"typography":{"fontWeight":"600"}}} -->
-			<!-- wp:navigation-link {"label":"Home","url":"/"} /-->
-			<!-- wp:navigation-link {"label":"Services","url":"/services/"} /-->
-			<!-- wp:navigation-link {"label":"Work","url":"/case-studies/"} /-->
-			<!-- wp:navigation-link {"label":"Blog","url":"/blog/"} /-->
-			<!-- wp:navigation-link {"label":"About","url":"/about/"} /-->
-		<!-- /wp:navigation -->
+		<!-- Logo (or site title fallback) — driven by [grosharp_site_branding] -->
+		<!-- wp:shortcode -->[grosharp_site_branding]<!-- /wp:shortcode -->
 
-		<!-- wp:buttons {"className":"hidden md:flex","layout":{"type":"flex","justifyContent":"right"}} -->
-		<div class="wp-block-buttons hidden md:flex">
-			<!-- wp:button {"className":"is-style-fill"} -->
-			<div class="wp-block-button is-style-fill"><a class="wp-block-button__link wp-element-button" href="/contact/">Start a Project</a></div>
-			<!-- /wp:button -->
-		</div>
-		<!-- /wp:buttons -->
+		<!-- Primary navigation — driven by "Primary Menu" in Appearance → Menus -->
+		<!-- wp:shortcode -->[grosharp_primary_nav]<!-- /wp:shortcode -->
+
+		<!-- CTA button — driven by grosharp_settings cta_label / cta_url -->
+		<!-- wp:shortcode -->[grosharp_header_cta]<!-- /wp:shortcode -->
+
 	</div>
 	<!-- /wp:group -->
 </header>

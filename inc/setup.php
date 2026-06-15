@@ -25,10 +25,11 @@ add_action(
 
 		register_nav_menus(
 			array(
-				'primary' => __( 'Primary Menu', 'grosharp' ),
-				'footer'  => __( 'Footer Menu', 'grosharp' ),
+				'primary'      => __( 'Primary Menu', 'grosharp' ),
+				'footer'       => __( 'Footer Menu', 'grosharp' ),
+				'footer-legal' => __( 'Footer Legal Menu', 'grosharp' ),
 			)
-		 );
+		);
 	}
 );
 

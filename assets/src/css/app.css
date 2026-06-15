@@ -9,7 +9,7 @@
 	}
 
 	body {
-		background: var(--grosharp-surface);
+		background: #ffffff;
 		color: var(--grosharp-ink);
 		font-family: var(--grosharp-font-body);
 		font-size: 1rem;

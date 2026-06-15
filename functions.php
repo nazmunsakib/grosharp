@@ -16,4 +16,5 @@ define( 'GROSHARP_THEME_URI', get_template_directory_uri() );
 require_once GROSHARP_THEME_DIR . '/inc/setup.php';
 require_once GROSHARP_THEME_DIR . '/inc/assets.php';
 require_once GROSHARP_THEME_DIR . '/inc/settings-css.php';
+require_once GROSHARP_THEME_DIR . '/inc/menus.php';
 
