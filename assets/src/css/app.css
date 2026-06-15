@@ -270,3 +270,277 @@ body.gs-cursor-click #gs-cursor-ring {
 		display: none;
 	}
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STICKY HEADER
+   ─────────────────────────────────────────────────────────────────────────
+   Header is ALWAYS fixed — no absolute→fixed swap in JS (that caused the
+   jump). JS only toggles .gs-header-sticky for the shadow state.
+═══════════════════════════════════════════════════════════════════════════ */
+
+header.wp-block-group {
+	position: fixed !important;   /* override Tailwind's `absolute` class */
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+}
+
+/* Admin-bar offset — always applied, not just when sticky */
+body.admin-bar header.wp-block-group {
+	top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+	body.admin-bar header.wp-block-group {
+		top: 46px;
+	}
+}
+
+/* Prevent scroll when mobile menu is open */
+body.gs-menu-open {
+	overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE MENU — full-screen overlay, expands top→bottom on open,
+   collapses bottom→top on close (clip-path animation, no GSAP needed)
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Overlay wrapper: visibility + transition-delay trick.
+   On close: visibility waits 0.5s (matching clip-path duration) before
+   hiding, so the clip-path animation plays fully before disappearing.
+   On open: visibility becomes visible instantly (delay: 0s). ── */
+.gs-mobile-menu {
+	visibility: hidden;
+	pointer-events: none;
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	transition: visibility 0s linear 0.5s; /* delay matches clip-path duration */
+}
+
+.gs-mobile-menu.gs-menu-active {
+	visibility: visible;
+	pointer-events: auto;
+	transition: visibility 0s linear 0s; /* instant on open */
+}
+
+/* ── Full-screen panel: clip-path drives the expand-from-top animation.
+   inset(0 0 100% 0) = fully clipped (nothing visible).
+   inset(0 0 0% 0)   = fully visible.
+   Animating the bottom inset 100%→0 reveals content top→bottom (open)
+   and 0→100% collapses it bottom→top (close). ── */
+.gs-mobile-menu-panel {
+	position: fixed;
+	inset: 0;
+	background: #ffffff;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	clip-path: inset(0 0 100% 0);
+	transition: clip-path 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gs-mobile-menu.gs-menu-active .gs-mobile-menu-panel {
+	clip-path: inset(0 0 0% 0);
+}
+
+.gs-mobile-menu-nav {
+	flex: 1;
+}
+
+/* ── Nav links: editorial but not oversized ── */
+.gs-mobile-nav-link {
+	display: block;
+	font-family: var(--grosharp-font-heading, 'Plus Jakarta Sans', sans-serif);
+	font-size: clamp(1.375rem, 5vw, 2rem);
+	font-weight: 800;
+	letter-spacing: -0.025em;
+	line-height: 1.2;
+	color: #0d0d12;
+	text-decoration: none;
+	padding: 0.75rem 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+	transition: color 0.15s ease;
+}
+
+.gs-mobile-nav-link:hover {
+	color: #654cff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gs-mobile-menu-panel {
+		transition: none;
+	}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE-FIRST RESPONSIVE
+   Reduces font sizes, spacing, and layout for small screens.
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Section padding scale (mobile-first) ── */
+.grosharp-block {
+	padding-top: 2.5rem;    /* 40px mobile */
+	padding-bottom: 2.5rem;
+}
+
+@media (min-width: 640px) {
+	.grosharp-block {
+		padding-top: 3.5rem;   /* 56px tablet */
+		padding-bottom: 3.5rem;
+	}
+}
+
+@media (min-width: 1024px) {
+	.grosharp-block {
+		padding-top: 5rem;     /* 80px desktop */
+		padding-bottom: 5rem;
+	}
+}
+
+/* ── Hero — override block padding; must clear absolute header ── */
+/* Header height ≈ 80px → give hero ≥ 96px top padding on mobile */
+.grosharp-hero {
+	padding-top: 6rem !important;
+	padding-bottom: 2.5rem !important;
+}
+
+@media (min-width: 768px) {
+	.grosharp-hero {
+		padding-top: 7rem !important;
+		padding-bottom: 4rem !important;
+	}
+}
+
+@media (min-width: 1024px) {
+	.grosharp-hero {
+		padding-top: 8rem !important;
+		padding-bottom: 6rem !important;
+	}
+}
+
+/* ── Hero heading scale ── */
+.grosharp-hero h1 {
+	font-size: clamp(2rem, 7vw, 4.688rem); /* 32px → 75px */
+	line-height: 1.08;
+}
+
+/* ── Section headings scale ── */
+.grosharp-block h2 {
+	font-size: clamp(1.5rem, 4.5vw, 3.375rem); /* 24px → 54px */
+}
+
+/* ── Footer brand name ── */
+.grosharp-footer .gs-footer-brand-name {
+	font-size: clamp(2.5rem, 10vw, 7.5rem); /* 40px → 120px */
+	line-height: 0.90;
+}
+
+/* ── Images: always responsive ── */
+.grosharp-block img,
+.gs-container img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* ── Process steps: single column on mobile ── */
+.grosharp-process .gs-steps-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+	.grosharp-process .gs-steps-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (min-width: 1024px) {
+	.grosharp-process .gs-steps-grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+/* ── Services marquee: smaller on mobile ── */
+@media (max-width: 639px) {
+	.grosharp-services .gs-service-card {
+		min-width: 260px;
+	}
+}
+
+/* ── Featured projects: single col on mobile ── */
+@media (max-width: 767px) {
+	.grosharp-projects .gs-projects-grid {
+		grid-template-columns: 1fr !important;
+	}
+}
+
+/* ── Latest posts: single col on mobile ── */
+@media (max-width: 767px) {
+	.grosharp-latest-posts .gs-posts-grid {
+		grid-template-columns: 1fr !important;
+	}
+}
+
+/* ── Contact section: full-width on mobile ── */
+@media (max-width: 767px) {
+	.grosharp-contact .gs-contact-card {
+		font-size: 0.875rem;
+	}
+}
+
+/* ── FAQ: remove two-column on small mobile ── */
+@media (max-width: 639px) {
+	.grosharp-faq .grid-cols-1 {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ── Footer footer brand section ── */
+@media (max-width: 767px) {
+	.grosharp-footer .gs-container > .grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ── Header pill ── */
+.gs-header-pill {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	margin-inline: auto;
+	width: 100%;
+	max-width: 860px;
+	min-height: 44px;
+	padding: 6px 8px 6px 16px;
+	border-radius: 9999px;
+	border: 1px solid rgba(0, 0, 0, 0.09);
+	background: rgba(255, 255, 255, 0.80);
+	box-shadow: 0 8px 32px rgba(101, 76, 255, 0.09);
+	backdrop-filter: blur(24px);
+	-webkit-backdrop-filter: blur(24px);
+}
+
+/* Nav sits in column 2 — truly centered */
+.gs-header-pill > .wp-block-shortcode:nth-child(2) {
+	display: flex;
+	justify-content: center;
+}
+
+/* CTA sits in column 3 — flush right */
+.gs-header-pill > .wp-block-shortcode:nth-child(3) {
+	display: flex;
+	justify-content: flex-end;
+}
+
+/* Mobile: collapse grid back to flex */
+@media (max-width: 1023px) {
+	.gs-header-pill {
+		display: flex;
+		justify-content: space-between;
+		max-width: calc(100% - 2rem);
+	}
+}

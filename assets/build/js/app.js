@@ -476,36 +476,79 @@
 		});
 	}
 
-	/* ─── Header: scroll-aware background ────────────────────────────────
-	   Header is absolute on page load (transparent over hero).
-	   Once the user scrolls past ~60px, swap to a fixed frosted-glass bar
-	   so it stays visible over page content.
+	/* ─── Header: smooth sticky on scroll ────────────────────────────────
+	   Starts absolute (transparent over hero).
+	   After THRESHOLD px scrolled → becomes fixed and slides in smoothly.
+	   Accounts for WP admin bar height when logged in.
+	─────────────────────────────────────────────────────────────────────── */
+	/* ─── Sticky header ───────────────────────────────────────────────────
+	   Header is always position:fixed (CSS handles it).
+	   JS only toggles .gs-header-sticky for the shadow state.
+	   No position switching = no jump.
 	─────────────────────────────────────────────────────────────────────── */
 	function initHeaderScroll() {
-		var header = document.querySelector('header.wp-block-group');
+		var header    = document.querySelector('header.wp-block-group');
 		if (!header) return;
 
 		var THRESHOLD = 60;
-		var scrolled  = false;
+		var isSticky  = false;
+		var ticking   = false;
 
 		function onScroll() {
-			var past = window.scrollY > THRESHOLD;
-			if (past === scrolled) return;
-			scrolled = past;
-
-			if (past) {
-				header.classList.remove('absolute');
-				header.classList.add('fixed');
-				header.style.paddingTop = '0.5rem';
-			} else {
-				header.classList.remove('fixed');
-				header.classList.add('absolute');
-				header.style.paddingTop = '';
-			}
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(function () {
+				var past = window.scrollY > THRESHOLD;
+				if (past !== isSticky) {
+					isSticky = past;
+					header.classList.toggle('gs-header-sticky', past);
+				}
+				ticking = false;
+			});
 		}
 
 		window.addEventListener('scroll', onScroll, { passive: true });
 		onScroll(); /* run once on load */
+	}
+
+	/* ─── Mobile menu ─────────────────────────────────────────────────────
+	   Pure CSS-transition approach — no GSAP dependency.
+	   Panel slide and backdrop fade are handled by CSS; JS only toggles
+	   the .gs-menu-active class on the overlay.
+	─────────────────────────────────────────────────────────────────────── */
+	function initMobileMenu() {
+		var overlay  = document.getElementById('gs-mobile-menu');
+		var btnOpen  = document.getElementById('gs-menu-open');
+		var btnClose = document.getElementById('gs-menu-close');
+
+		if (!overlay || !btnOpen) return;
+
+		function openMenu() {
+			overlay.classList.add('gs-menu-active');
+			overlay.setAttribute('aria-hidden', 'false');
+			btnOpen.setAttribute('aria-expanded', 'true');
+			document.body.classList.add('gs-menu-open');
+		}
+
+		function closeMenu() {
+			overlay.classList.remove('gs-menu-active');
+			overlay.setAttribute('aria-hidden', 'true');
+			btnOpen.setAttribute('aria-expanded', 'false');
+			document.body.classList.remove('gs-menu-open');
+		}
+
+		btnOpen.addEventListener('click', openMenu);
+		if (btnClose) btnClose.addEventListener('click', closeMenu);
+
+		/* Close on Escape */
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'Escape' && overlay.classList.contains('gs-menu-active')) closeMenu();
+		});
+
+		/* Close when a nav link inside the menu is clicked */
+		overlay.querySelectorAll('a').forEach(function (a) {
+			a.addEventListener('click', closeMenu);
+		});
 	}
 
 	/* ─── Boot ──────────────────────────────────────────────────────────── */
@@ -515,6 +558,7 @@
 		}
 
 		initHeaderScroll();
+		initMobileMenu();
 		initCustomCursor();
 		initMagneticButtons();
 		initSmoothScroll();

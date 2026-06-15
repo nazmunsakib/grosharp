@@ -155,28 +155,66 @@ add_action(
 			function () {
 				$nav_class = 'hidden rounded-full bg-[#f7f5ff] px-1 py-1 lg:flex lg:items-center lg:gap-1';
 
-				if ( ! has_nav_menu( 'primary' ) ) {
-					return '<nav class="' . $nav_class . '" aria-label="Primary navigation">'
-						. '<a href="/" class="font-body text-[15px] font-semibold text-brand-dark no-underline transition-colors duration-150 hover:text-brand-primary px-3 py-1.5">Home</a>'
+				// Shared nav link list — used in desktop pill AND mobile drawer.
+				$links = has_nav_menu( 'primary' )
+					? wp_nav_menu(
+						array(
+							'theme_location' => 'primary',
+							'container'      => false,
+							'echo'           => false,
+							'fallback_cb'    => false,
+							'items_wrap'     => '%3$s',
+							'walker'         => new Grosharp_Primary_Nav_Walker(),
+						)
+					)
+					: '<a href="/" class="font-body text-[15px] font-semibold text-brand-dark no-underline transition-colors duration-150 hover:text-brand-primary px-3 py-1.5">Home</a>'
 						. '<a href="/services/" class="font-body text-[15px] font-semibold text-brand-dark no-underline transition-colors duration-150 hover:text-brand-primary px-3 py-1.5">Services</a>'
 						. '<a href="/case-studies/" class="font-body text-[15px] font-semibold text-brand-dark no-underline transition-colors duration-150 hover:text-brand-primary px-3 py-1.5">Work</a>'
 						. '<a href="/blog/" class="font-body text-[15px] font-semibold text-brand-dark no-underline transition-colors duration-150 hover:text-brand-primary px-3 py-1.5">Blog</a>'
-						. '<a href="/about/" class="font-body text-[15px] font-semibold text-brand-dark no-underline transition-colors duration-150 hover:text-brand-primary px-3 py-1.5">About</a>'
-						. '</nav>';
-				}
+						. '<a href="/about/" class="font-body text-[15px] font-semibold text-brand-dark no-underline transition-colors duration-150 hover:text-brand-primary px-3 py-1.5">About</a>';
 
-				return wp_nav_menu(
-					array(
-						'theme_location'       => 'primary',
-						'container'            => 'nav',
-						'container_class'      => $nav_class,
-						'container_aria_label' => 'Primary navigation',
-						'echo'                 => false,
-						'fallback_cb'          => false,
-						'items_wrap'           => '%3$s',
-						'walker'               => new Grosharp_Primary_Nav_Walker(),
+				$gs      = get_option( 'grosharp_settings', array() );
+				$cta_lbl = esc_html( $gs['cta_label'] ?? 'Start a Project' );
+				$cta_url = esc_url( $gs['cta_url']   ?? '/contact/' );
+
+				// Mobile nav link class — larger tap targets, full-width.
+				$ml = 'gs-mobile-nav-link font-body text-[18px] font-semibold text-[#0d0d12] no-underline py-3 border-b border-black/[0.06] transition-colors hover:text-[#654cff]';
+				$mobile_links = has_nav_menu( 'primary' )
+					? wp_nav_menu(
+						array(
+							'theme_location' => 'primary',
+							'container'      => false,
+							'echo'           => false,
+							'fallback_cb'    => false,
+							'items_wrap'     => '%3$s',
+							'walker'         => new class extends Walker_Nav_Menu {
+								public function start_el( &$output, $data_object, $depth = 0, $args = null, $current_object_id = 0 ) {
+									$ml = 'gs-mobile-nav-link font-body text-[18px] font-semibold text-[#0d0d12] no-underline py-3 border-b border-black/[0.06] transition-colors hover:text-[#654cff]';
+									$output .= sprintf( '<a href="%s" class="%s">%s</a>', esc_url( $data_object->url ?? '#' ), $ml, esc_html( $data_object->title ?? '' ) );
+								}
+								public function start_lvl( &$output, $depth = 0, $args = null ) {}
+								public function end_lvl( &$output, $depth = 0, $args = null ) {}
+								public function end_el( &$output, $data_object, $depth = 0, $args = null ) {}
+							},
+						)
 					)
-				) ?? '';
+					: "<a href=\"/\" class=\"{$ml}\">Home</a>"
+						. "<a href=\"/services/\" class=\"{$ml}\">Services</a>"
+						. "<a href=\"/case-studies/\" class=\"{$ml}\">Work</a>"
+						. "<a href=\"/blog/\" class=\"{$ml}\">Blog</a>"
+						. "<a href=\"/about/\" class=\"{$ml}\">About</a>";
+
+				$ham_icon = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect y="3" width="20" height="2" rx="1" fill="currentColor"/><rect y="9" width="20" height="2" rx="1" fill="currentColor"/><rect y="15" width="20" height="2" rx="1" fill="currentColor"/></svg>';
+
+				return
+					// ── Desktop pill nav ────────────────────────────────────────
+					'<nav class="' . $nav_class . '" aria-label="Primary navigation">' . $links . '</nav>'
+
+					// ── Mobile hamburger button ──────────────────────────────────
+					// The overlay is rendered via wp_footer (outside backdrop-filter container)
+					. '<button id="gs-menu-open" class="lg:hidden flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.09] bg-white/60 text-[#0d0d12] transition-colors hover:bg-white" aria-label="Open menu" aria-expanded="false" aria-controls="gs-mobile-menu">'
+					. $ham_icon
+					. '</button>';
 			}
 		);
 
@@ -328,5 +366,95 @@ add_action(
 				return $has_any ? $out : '';
 			}
 		);
+	}
+);
+
+/**
+ * Mobile menu overlay — rendered at body level via wp_footer.
+ *
+ * Must live OUTSIDE the header (which has backdrop-filter) because
+ * backdrop-filter creates a new containing block for position:fixed children
+ * in Chromium, which breaks the full-screen overlay behaviour.
+ */
+add_action(
+	'wp_footer',
+	function () {
+		// Styling handled entirely by .gs-mobile-nav-link CSS class
+		$mobile_links = has_nav_menu( 'primary' )
+			? wp_nav_menu(
+				array(
+					'theme_location' => 'primary',
+					'container'      => false,
+					'echo'           => false,
+					'fallback_cb'    => false,
+					'items_wrap'     => '%3$s',
+					'walker'         => new class extends Walker_Nav_Menu {
+						public function start_el( &$output, $data_object, $depth = 0, $args = null, $current_object_id = 0 ) {
+							$output .= sprintf(
+								'<a href="%s" class="gs-mobile-nav-link">%s</a>',
+								esc_url( $data_object->url ?? '#' ),
+								esc_html( $data_object->title ?? '' )
+							);
+						}
+						public function start_lvl( &$output, $depth = 0, $args = null ) {}
+						public function end_lvl( &$output, $depth = 0, $args = null ) {}
+						public function end_el( &$output, $data_object, $depth = 0, $args = null ) {}
+					},
+				)
+			)
+			: '<a href="/" class="gs-mobile-nav-link">Home</a>'
+				. '<a href="/services/" class="gs-mobile-nav-link">Services</a>'
+				. '<a href="/case-studies/" class="gs-mobile-nav-link">Work</a>'
+				. '<a href="/blog/" class="gs-mobile-nav-link">Blog</a>'
+				. '<a href="/about/" class="gs-mobile-nav-link">About</a>';
+
+		$gs       = get_option( 'grosharp_settings', array() );
+		$cta_lbl  = esc_html( $gs['cta_label'] ?? 'Start a Project' );
+		$cta_url  = esc_url( $gs['cta_url']   ?? '/contact/' );
+		$logo_id  = (int) get_theme_mod( 'custom_logo' );
+		$home_url = esc_url( home_url( '/' ) );
+
+		// Brand mark for menu header — logo image or site name
+		if ( $logo_id ) {
+			$brand = sprintf(
+				'<a href="%s" class="inline-flex items-center no-underline" rel="home">%s</a>',
+				$home_url,
+				wp_get_attachment_image( $logo_id, 'full', false, array( 'style' => 'max-height:28px;width:auto;display:block;', 'alt' => esc_attr( get_bloginfo( 'name' ) ) ) )
+			);
+		} else {
+			$brand = sprintf(
+				'<a href="%s" class="font-heading text-[16px] font-black text-[#0d0d12] no-underline" rel="home">%s</a>',
+				$home_url,
+				esc_html( get_bloginfo( 'name' ) )
+			);
+		}
+
+		$close_icon = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+		echo '<div id="gs-mobile-menu" class="gs-mobile-menu" role="dialog" aria-label="Mobile menu" aria-modal="true" aria-hidden="true">'
+			. '<div class="gs-mobile-menu-panel">'
+
+			// ── Top bar: brand + close button ───────────────────────────────
+			. '<div class="flex items-center justify-between px-6 py-4 border-b border-black/[0.07]">'
+			. $brand
+			. '<button id="gs-menu-close" class="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.09] text-[#0d0d12] transition-colors hover:bg-[#f4f3ff]" aria-label="Close menu">'
+			. $close_icon
+			. '</button>'
+			. '</div>'
+
+			// ── Large editorial nav links ────────────────────────────────────
+			. '<nav class="gs-mobile-menu-nav flex flex-col px-6 pt-6 pb-2" aria-label="Mobile navigation">'
+			. $mobile_links
+			. '</nav>'
+
+			// ── CTA + bottom spacer ──────────────────────────────────────────
+			. '<div class="px-6 pt-6 pb-10">'
+			. '<a href="' . $cta_url . '" class="flex w-full min-h-[52px] items-center justify-center rounded-full bg-[#654cff] font-body text-[16px] font-semibold text-white no-underline shadow-[0_18px_48px_rgba(101,76,255,0.38)] transition-opacity duration-200 hover:opacity-90">'
+			. $cta_lbl
+			. '</a>'
+			. '</div>'
+
+			. '</div>' // .gs-mobile-menu-panel
+			. '</div>'; // #gs-mobile-menu
 	}
 );
