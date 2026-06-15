@@ -523,14 +523,27 @@
 		var section = document.querySelector('.grosharp-cta');
 		if (!section) return;
 
-		var tl  = gs().timeline({ scrollTrigger: stConfig(section, { start: 'top 82%' }) });
-		var h2  = section.querySelector('h2');
-		var sub = h2 && h2.nextElementSibling && h2.nextElementSibling.matches('p') ? h2.nextElementSibling : null;
-		var btn = section.querySelector('.wp-block-button__link, a[href]');
+		var card    = section.querySelector('.cta-card');
+		var eyebrow = section.querySelector('.cta-eyebrow');
+		var h2      = section.querySelector('.cta-heading, h2');
+		var sub     = section.querySelector('.cta-sub');
+		var actions = section.querySelector('.cta-actions');
 
-		if (h2)  tl.fromTo(h2,  { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0);
-		if (sub) tl.fromTo(sub, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, 0.2);
-		if (btn) tl.fromTo(btn, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.35);
+		/* Card rises as one unit */
+		if (card) {
+			gs().fromTo(card,
+				{ opacity: 0, y: 48, scale: 0.97 },
+				{ opacity: 1, y: 0, scale: 1, duration: 1.0, ease: 'power3.out',
+				  scrollTrigger: stConfig(card, { start: 'top 86%' }) }
+			);
+		}
+
+		/* Content sequences inside the card */
+		var tl = gs().timeline({ scrollTrigger: stConfig(section, { start: 'top 80%' }), delay: 0.2 });
+		if (eyebrow) tl.fromTo(eyebrow, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 0);
+		if (h2)      tl.fromTo(h2,      { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.12);
+		if (sub)     tl.fromTo(sub,     { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, 0.32);
+		if (actions) tl.fromTo(actions, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.48);
 	}
 
 	/* ═══════════════════════════════════════════════════════════════════════
@@ -724,6 +737,205 @@
 	}
 
 	/* ═══════════════════════════════════════════════════════════════════════
+	   ABOUT PAGE ANIMATIONS
+	═══════════════════════════════════════════════════════════════════════ */
+	function initAboutHero() {
+		if (prefersReducedMotion || !gs()) return;
+		var hero = document.querySelector('.grosharp-about-hero');
+		if (!hero) return;
+
+		var eyebrow = hero.querySelector('[data-gs-eyebrow]');
+		var h1      = hero.querySelector('.about-hero-heading');
+		var sub     = hero.querySelector('.about-hero-sub');
+		var ctas    = hero.querySelectorAll('.about-hero-cta-primary, .about-hero-cta-secondary');
+		var stats   = hero.querySelectorAll('.about-hero-stat');
+
+		var tl = gs().timeline({ delay: 0.1 });
+
+		if (eyebrow) {
+			tl.fromTo(eyebrow, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, 0);
+		}
+		if (h1) {
+			var spans = splitLines(h1);
+			tl.fromTo(spans.length ? spans : [h1],
+				{ yPercent: spans.length ? 100 : 0, opacity: 0, y: spans.length ? 0 : 32 },
+				{ yPercent: 0, opacity: 1, y: 0, duration: 1.05, ease: 'power3.out', stagger: 0.05 },
+				0.15
+			);
+		}
+		if (sub) {
+			tl.fromTo(sub, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 0.5);
+		}
+		if (ctas.length) {
+			tl.fromTo(ctas, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.08 }, 0.65);
+		}
+		if (stats.length) {
+			tl.fromTo(stats, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: { amount: 0.25 } }, 0.8);
+		}
+	}
+
+	function initAboutStory() {
+		if (!ok()) return;
+		var section = document.querySelector('.grosharp-about-story');
+		if (!section) return;
+
+		var eyebrow   = section.querySelector('[data-gs-eyebrow]');
+		var quoteWrap = section.querySelector('.about-story-quote-wrap');
+		var quoteMark = section.querySelector('.about-story-quote-mark');
+		var quote     = section.querySelector('.about-story-quote');
+		var paras     = section.querySelectorAll('.about-story-p');
+
+		/* Eyebrow pill */
+		if (eyebrow) {
+			gs().fromTo(eyebrow,
+				{ opacity: 0, y: 14 },
+				{ opacity: 1, y: 0, duration: 0.55, ease: 'power2.out',
+				  scrollTrigger: stConfig(eyebrow, { start: 'top 88%' }) }
+			);
+		}
+
+		/* Left column — pulled quote rises up, quote mark pops slightly after */
+		if (quoteWrap) {
+			var tl = gs().timeline({ scrollTrigger: stConfig(quoteWrap, { start: 'top 86%' }) });
+			if (quoteMark) tl.fromTo(quoteMark, { opacity: 0, scale: 0.7, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: 'back.out(1.4)' }, 0);
+			if (quote)     tl.fromTo(quote,     { opacity: 0, y: 28 },             { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out' }, 0.1);
+
+			/* Slow parallax on quote as you scroll past */
+			if (st()) {
+				st().create({
+					trigger: section,
+					start: 'top bottom',
+					end: 'bottom top',
+					scrub: 1.5,
+					onUpdate: function (self) {
+						if (quoteWrap) gs().set(quoteWrap, { y: self.progress * -28 });
+					},
+				});
+			}
+		}
+
+		/* Right column — paragraphs cascade up one by one */
+		if (paras.length) {
+			gs().fromTo(paras,
+				{ opacity: 0, y: 24 },
+				{
+					opacity: 1, y: 0,
+					duration: 0.75, ease: 'power2.out',
+					stagger: 0.14,
+					scrollTrigger: stConfig(paras[0], { start: 'top 88%' }),
+				}
+			);
+		}
+	}
+
+	function initAboutValues() {
+		if (!ok()) return;
+		var section = document.querySelector('.grosharp-about-values');
+		if (!section) return;
+
+		/* Section header: eyebrow → h2 → sub */
+		revealHeader(section);
+
+		var cards = section.querySelectorAll('[data-gs-value-card]');
+		if (!cards.length) return;
+
+		/* Cards cascade in with stagger — icons scale up inside each card */
+		var icons = section.querySelectorAll('.about-value-icon');
+		gs().set(icons, { scale: 0.75, opacity: 0 });
+
+		gs().fromTo(cards,
+			{ opacity: 0, y: 40 },
+			{
+				opacity: 1, y: 0,
+				duration: 0.8, ease: 'power3.out',
+				stagger: 0.12,
+				scrollTrigger: stConfig(cards[0], { start: 'top 88%' }),
+				onStart: function () {
+					/* Icons pop in after cards start rising */
+					gs().fromTo(icons,
+						{ scale: 0.75, opacity: 0 },
+						{ scale: 1, opacity: 1, duration: 0.55, ease: 'back.out(1.6)', stagger: 0.12, delay: 0.2 }
+					);
+				},
+			}
+		);
+
+		/* Hover: icon lifts, number watermark brightens */
+		cards.forEach(function (card) {
+			var icon = card.querySelector('.about-value-icon');
+			card.addEventListener('mouseenter', function () {
+				if (icon) gs().to(icon, { scale: 1.1, duration: 0.28, ease: 'power2.out' });
+			});
+			card.addEventListener('mouseleave', function () {
+				if (icon) gs().to(icon, { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
+			});
+		});
+	}
+
+
+	/* ─── PAGE HERO (general — About, Work, Contact, Services) ───────────────── */
+	function initPageHero() {
+		var section = document.querySelector('.grosharp-page-hero');
+		if (!section || !gs()) return;
+
+		var eyebrow = section.querySelector('[data-ph-eyebrow]');
+		var heading = section.querySelector('[data-ph-heading]');
+		var sub     = section.querySelector('[data-ph-sub]');
+		var imgs    = section.querySelectorAll('[data-ph-img]');
+
+		var tl = gs().timeline({ defaults: { ease: 'power2.out' } });
+
+		/* Eyebrow slides in from slight upward offset */
+		if (eyebrow) {
+			tl.fromTo(eyebrow,
+				{ opacity: 0, y: 14 },
+				{ opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }
+			);
+		}
+
+		/* Heading: animate the two color-spans independently (preserves .ph-heading-dark / .ph-heading-accent colors).
+		   Do NOT use splitLines() here — it rewrites innerHTML and strips the color spans. */
+		if (heading) {
+			var headingSpans = heading.querySelectorAll('.ph-heading-dark, .ph-heading-accent');
+			var headingTarget = headingSpans.length ? headingSpans : heading;
+			tl.fromTo(headingTarget,
+				{ opacity: 0, y: 28 },
+				{ opacity: 1, y: 0, duration: 0.65, stagger: { amount: 0.2 } },
+				eyebrow ? '-=0.2' : 0
+			);
+		}
+
+		/* Sub paragraph */
+		if (sub) {
+			tl.fromTo(sub,
+				{ opacity: 0, y: 16 },
+				{ opacity: 1, y: 0, duration: 0.55 },
+				'-=0.3'
+			);
+		}
+
+		/* Images stagger up */
+		if (imgs.length) {
+			tl.fromTo(imgs,
+				{ opacity: 0, y: 32 },
+				{ opacity: 1, y: 0, duration: 0.7, stagger: { amount: 0.18 } },
+				'-=0.25'
+			);
+		}
+
+		/* Above-fold: play immediately. Below fold: scroll trigger */
+		var rect = section.getBoundingClientRect();
+		if (rect.top < window.innerHeight * 1.05) {
+			tl.play();
+		} else if (st()) {
+			st().create(Object.assign(
+				stConfig(section, { start: 'top 82%' }),
+				{ animation: tl }
+			));
+		}
+	}
+
+	/* ═══════════════════════════════════════════════════════════════════════
 	   BOOT
 	═══════════════════════════════════════════════════════════════════════ */
 	document.addEventListener('DOMContentLoaded', function () {
@@ -750,5 +962,13 @@
 		initContactAnimation();
 		initFooterAnimation();
 		initRevealAnimations();
+		/* About page */
+		initAboutHero();
+		initAboutStory();
+		initAboutValues();
+		/* General page hero */
+		initPageHero();
 	});
 })();
+
+// BOOT already declared above — initPageHero appended here and called in DOMContentLoaded above
