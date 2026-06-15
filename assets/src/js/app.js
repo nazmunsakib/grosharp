@@ -938,6 +938,130 @@
 	/* ═══════════════════════════════════════════════════════════════════════
 	   BOOT
 	═══════════════════════════════════════════════════════════════════════ */
+
+	/* ─── WORK GRID ──────────────────────────────────────────────────────────── */
+	function initWorkGrid() {
+		if (!ok()) return;
+		var section = document.querySelector('.grosharp-work-grid');
+		if (!section) return;
+
+		var eyebrow = section.querySelector('.wg-eyebrow');
+		var heading = section.querySelector('.wg-heading');
+		var sub     = section.querySelector('.wg-sub');
+		var cards   = section.querySelectorAll('[data-wg-card]');
+		var filters = section.querySelectorAll('.wg-filter-btn');
+
+		/* Header reveal */
+		if (eyebrow || heading || sub) {
+			var tl = gs().timeline({ scrollTrigger: stConfig(section, { start: 'top 84%' }) });
+			if (eyebrow) tl.fromTo(eyebrow, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 0);
+			if (heading) tl.fromTo(heading, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.1);
+			if (sub)     tl.fromTo(sub,     { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, 0.25);
+		}
+
+		/* Cards cascade in */
+		if (cards.length) {
+			gs().fromTo(cards,
+				{ opacity: 0, y: 40 },
+				{
+					opacity: 1, y: 0,
+					duration: 0.75, ease: 'power3.out',
+					stagger: { amount: 0.35 },
+					scrollTrigger: stConfig(cards[0], { start: 'top 90%' }),
+				}
+			);
+		}
+
+		/* Filter tabs — client-side show/hide with GSAP crossfade */
+		filters.forEach(function (btn) {
+			btn.addEventListener('click', function () {
+				var filter = btn.getAttribute('data-filter');
+
+				/* Update active tab */
+				filters.forEach(function (b) {
+					b.classList.remove('is-active');
+					b.setAttribute('aria-selected', 'false');
+				});
+				btn.classList.add('is-active');
+				btn.setAttribute('aria-selected', 'true');
+
+				/* Fade + stagger visible cards */
+				var showing = [];
+				var hiding  = [];
+				cards.forEach(function (card) {
+					var types = (card.getAttribute('data-type') || '').split(' ');
+					var match = filter === 'all' || types.indexOf(filter) !== -1;
+					if (match) showing.push(card);
+					else        hiding.push(card);
+				});
+
+				if (hiding.length) {
+					gs().to(hiding, { opacity: 0, y: 12, duration: 0.2, ease: 'power2.in',
+						onComplete: function () {
+							hiding.forEach(function (c) { c.classList.add('wg-card--hidden'); });
+						}
+					});
+				}
+				showing.forEach(function (c) { c.classList.remove('wg-card--hidden'); });
+				if (showing.length) {
+					gs().fromTo(showing,
+						{ opacity: 0, y: 20 },
+						{ opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.06, delay: 0.15 }
+					);
+				}
+			});
+		});
+	}
+
+	/* ─── WORK FEATURED ──────────────────────────────────────────────────────── */
+	function initWorkFeatured() {
+		if (!ok()) return;
+		var section = document.querySelector('.grosharp-work-featured');
+		if (!section) return;
+
+		var imgCol  = section.querySelector('[data-wf-img-col]');
+		var eyebrow = section.querySelector('[data-wf-eyebrow]');
+		var title   = section.querySelector('[data-wf-title]');
+		var excerpt = section.querySelector('[data-wf-excerpt]');
+		var stats   = section.querySelectorAll('.wf-stat');
+		var cta     = section.querySelector('[data-wf-cta]');
+
+		/* Image column slides in from left */
+		if (imgCol) {
+			gs().fromTo(imgCol,
+				{ opacity: 0, x: -36 },
+				{ opacity: 1, x: 0, duration: 1.0, ease: 'power3.out',
+				  scrollTrigger: stConfig(imgCol, { start: 'top 84%' }) }
+			);
+			/* Subtle image parallax */
+			if (st()) {
+				st().create({
+					trigger: section,
+					start: 'top bottom',
+					end: 'bottom top',
+					scrub: 1.5,
+					onUpdate: function (self) {
+						if (imgCol) gs().set(imgCol, { y: self.progress * -24 });
+					},
+				});
+			}
+		}
+
+		/* Right content sequences in */
+		var tl = gs().timeline({ scrollTrigger: stConfig(section, { start: 'top 82%' }), delay: 0.15 });
+		if (eyebrow) tl.fromTo(eyebrow, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 0);
+		if (title)   tl.fromTo(title,   { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' }, 0.1);
+		if (excerpt) tl.fromTo(excerpt, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.28);
+		if (stats.length) {
+			tl.fromTo(stats,
+				{ opacity: 0, y: 16 },
+				{ opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', stagger: 0.1 },
+				0.4
+			);
+		}
+		if (cta) tl.fromTo(cta, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 0.6);
+	}
+
 	document.addEventListener('DOMContentLoaded', function () {
 		if (gs() && st()) gs().registerPlugin(st());
 
@@ -968,6 +1092,9 @@
 		initAboutValues();
 		/* General page hero */
 		initPageHero();
+		/* Work page */
+		initWorkGrid();
+		initWorkFeatured();
 	});
 })();
 
