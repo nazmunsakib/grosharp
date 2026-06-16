@@ -1,0 +1,94 @@
+{
+	"key": "group_grosharp_testimonial_details",
+	"title": "Testimonial Details",
+	"fields": [
+		{
+			"key": "field_testimonial_company",
+			"label": "Company",
+			"name": "testimonial_company",
+			"aria-label": "",
+			"type": "text",
+			"instructions": "The client's company or organisation name.",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": {
+				"width": "50",
+				"class": "",
+				"id": ""
+			},
+			"default_value": "",
+			"maxlength": "",
+			"placeholder": "e.g. Acme Corp",
+			"prepend": "",
+			"append": ""
+		},
+		{
+			"key": "field_testimonial_role",
+			"label": "Job Title / Role",
+			"name": "testimonial_role",
+			"aria-label": "",
+			"type": "text",
+			"instructions": "The client's position at their company.",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": {
+				"width": "50",
+				"class": "",
+				"id": ""
+			},
+			"default_value": "",
+			"maxlength": "",
+			"placeholder": "e.g. Head of Product",
+			"prepend": "",
+			"append": ""
+		},
+		{
+			"key": "field_testimonial_rating",
+			"label": "Rating",
+			"name": "testimonial_rating",
+			"aria-label": "",
+			"type": "select",
+			"instructions": "Star rating displayed on the testimonial card.",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": {
+				"width": "25",
+				"class": "",
+				"id": ""
+			},
+			"choices": {
+				"5.0": "★★★★★  5.0",
+				"4.5": "★★★★½  4.5",
+				"4.0": "★★★★☆  4.0",
+				"3.5": "★★★½☆  3.5",
+				"3.0": "★★★☆☆  3.0"
+			},
+			"default_value": "5.0",
+			"return_format": "value",
+			"multiple": 0,
+			"allow_null": 0,
+			"ui": 1,
+			"ajax": 0,
+			"placeholder": ""
+		}
+	],
+	"location": [
+		[
+			{
+				"param": "post_type",
+				"operator": "==",
+				"value": "grosharp_testimonial"
+			}
+		]
+	],
+	"menu_order": 0,
+	"position": "normal",
+	"style": "default",
+	"label_placement": "left",
+	"instruction_placement": "label",
+	"hide_on_screen": "",
+	"active": true,
+	"description": "Company, role, and star rating for each testimonial. Post Title = reviewer name. Excerpt = pull-quote on card. Content = full quote. Featured Image = company logo.",
+	"show_in_rest": 0,
+	"modified": 1718500001
+}

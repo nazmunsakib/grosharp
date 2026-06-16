@@ -1,0 +1,110 @@
+{
+	"key": "group_grosharp_service_details",
+	"title": "Service Details",
+	"fields": [
+		{
+			"key": "field_service_key_features",
+			"label": "Key Features",
+			"name": "service_key_features",
+			"aria-label": "",
+			"type": "textarea",
+			"instructions": "One feature per line. Each line becomes a checklist item in the service showcase.",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": {
+				"width": "",
+				"class": "",
+				"id": ""
+			},
+			"default_value": "",
+			"maxlength": "",
+			"rows": 6,
+			"placeholder": "Fast turnaround & clear communication\nMobile-first & fully responsive\nSEO-friendly code structure",
+			"new_lines": ""
+		},
+		{
+			"key": "field_service_detail_text",
+			"label": "Detail Text",
+			"name": "service_detail_text",
+			"aria-label": "",
+			"type": "textarea",
+			"instructions": "Optional short paragraph shown below the key features list (italic accent style).",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": {
+				"width": "",
+				"class": "",
+				"id": ""
+			},
+			"default_value": "",
+			"maxlength": "",
+			"rows": 3,
+			"placeholder": "",
+			"new_lines": ""
+		},
+		{
+			"key": "field_service_cta_label",
+			"label": "CTA Button Label",
+			"name": "service_cta_label",
+			"aria-label": "",
+			"type": "text",
+			"instructions": "Leave blank to use the default \"Learn More\" label.",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": {
+				"width": "50",
+				"class": "",
+				"id": ""
+			},
+			"default_value": "",
+			"maxlength": "",
+			"placeholder": "Learn More",
+			"prepend": "",
+			"append": ""
+		},
+		{
+			"key": "field_service_stats",
+			"label": "Service Stats",
+			"name": "service_stats",
+			"aria-label": "",
+			"type": "textarea",
+			"instructions": "One stat per line — format: value|label. Example:\n50+|Projects Delivered\n98%|Client Satisfaction\n3x|Average ROI\n\nMax 3 lines shown.",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": {
+				"width": "",
+				"class": "",
+				"id": ""
+			},
+			"default_value": "",
+			"maxlength": "",
+			"rows": 4,
+			"placeholder": "50+|Projects Delivered\n98%|Client Satisfaction\n3x|Average ROI",
+			"new_lines": ""
+		}
+	],
+	"location": [
+		[
+			{
+				"param": "post_type",
+				"operator": "==",
+				"value": "grosharp_service"
+			}
+		]
+	],
+	"menu_order": 0,
+	"position": "normal",
+	"style": "default",
+	"label_placement": "top",
+	"instruction_placement": "label",
+	"hide_on_screen": "",
+	"active": true,
+	"description": "Extra fields for the Service Showcase block — key features checklist, detail text, CTA label, and stat numbers.",
+	"show_in_rest": 0,
+	"acfe_display_title": "",
+	"acfe_autosync": "",
+	"acfe_form": 0,
+	"acfe_meta": "",
+	"acfe_note": "",
+	"modified": 1718500000
+}
