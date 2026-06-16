@@ -1062,6 +1062,116 @@
 		if (cta) tl.fromTo(cta, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 0.6);
 	}
 
+	/* ── Service Detail animations (single service page) ────────────────────────── */
+	function initServiceDetail() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+		var section = document.querySelector('[data-gs-service-detail]');
+		if (!section) return;
+
+		/* Intro content block */
+		var intro = section.querySelector('[data-sd-intro]');
+		if (intro) {
+			gsap.fromTo(intro,
+				{ opacity: 0, y: 28 },
+				{ opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+				  scrollTrigger: stConfig(intro, { start: 'top 86%' }) }
+			);
+		}
+
+		/* Features list (left col) */
+		var featuresCol = section.querySelector('[data-sd-features]');
+		if (featuresCol) {
+			gsap.fromTo(featuresCol,
+				{ opacity: 0, x: -32 },
+				{ opacity: 1, x: 0, duration: 0.75, ease: 'power3.out',
+				  scrollTrigger: stConfig(featuresCol, { start: 'top 84%' }) }
+			);
+			var items = featuresCol.querySelectorAll('li');
+			if (items.length) {
+				gsap.fromTo(items,
+					{ opacity: 0, x: -16 },
+					{ opacity: 1, x: 0, duration: 0.5, ease: 'power2.out',
+					  stagger: 0.07, delay: 0.15,
+					  scrollTrigger: stConfig(featuresCol, { start: 'top 80%' }) }
+				);
+			}
+		}
+
+		/* Stats + detail text (right col) */
+		var rightCol = section.querySelector('[data-sd-right]');
+		if (rightCol) {
+			var kids = Array.from(rightCol.children);
+			gsap.fromTo(kids,
+				{ opacity: 0, y: 24 },
+				{ opacity: 1, y: 0, duration: 0.65, ease: 'power2.out',
+				  stagger: 0.12,
+				  scrollTrigger: stConfig(rightCol, { start: 'top 84%' }) }
+			);
+		}
+
+		/* Featured image reveal */
+		var imgFigure = section.querySelector('[data-sd-image]');
+		if (imgFigure) {
+			gsap.fromTo(imgFigure,
+				{ opacity: 0, scale: 0.975, y: 24 },
+				{ opacity: 1, scale: 1, y: 0, duration: 1.0, ease: 'power3.out',
+				  scrollTrigger: stConfig(imgFigure, { start: 'top 88%' }) }
+			);
+		}
+	}
+
+	/* ── Service Showcase animations (services archive) ───────────────────────────── */
+	function initServiceShowcase() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+		var section = document.querySelector('[data-gs-service-showcase]');
+		if (!section) return;
+
+		var rows = section.querySelectorAll('[data-ss-row]');
+		if (!rows.length) return;
+
+		rows.forEach(function (row, i) {
+			var content = row.querySelector('[data-ss-content]');
+			var image   = row.querySelector('[data-ss-image]');
+			var isEven  = (i % 2 === 1); // even visual = image-left
+
+			var trigger = stConfig(row, { start: 'top 82%' });
+
+			// Content column: slides in from its side
+			if (content) {
+				var xFrom = isEven ? 36 : -36;
+				gsap.fromTo(
+					content,
+					{ opacity: 0, x: xFrom },
+					{ opacity: 1, x: 0, duration: 0.75, ease: 'power3.out', scrollTrigger: trigger }
+				);
+
+				// Stagger children: eyebrow, h2, p, ul, detail, cta
+				var kids = Array.from(content.children);
+				if (kids.length > 1) {
+					gsap.fromTo(
+						kids,
+						{ opacity: 0, y: 16 },
+						{ opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', stagger: 0.08,
+						  delay: 0.15, scrollTrigger: stConfig(row, { start: 'top 78%' }) }
+					);
+				}
+			}
+
+			// Image column: slides from opposite side with slight delay
+			if (image) {
+				var xImgFrom = isEven ? -28 : 28;
+				gsap.fromTo(
+					image,
+					{ opacity: 0, x: xImgFrom, scale: 0.97 },
+					{ opacity: 1, x: 0, scale: 1, duration: 0.85, ease: 'power3.out',
+					  delay: 0.1, scrollTrigger: stConfig(row, { start: 'top 80%' }) }
+				);
+			}
+		});
+	}
+
 	document.addEventListener('DOMContentLoaded', function () {
 		if (gs() && st()) gs().registerPlugin(st());
 
@@ -1095,6 +1205,10 @@
 		/* Work page */
 		initWorkGrid();
 		initWorkFeatured();
+		/* Services archive */
+		initServiceShowcase();
+		/* Single service detail */
+		initServiceDetail();
 	});
 })();
 
