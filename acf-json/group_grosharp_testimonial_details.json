@@ -3,44 +3,52 @@
 	"title": "Testimonial Details",
 	"fields": [
 		{
-			"key": "field_testimonial_company",
-			"label": "Company",
-			"name": "testimonial_company",
+			"key": "field_testimonial_client_name",
+			"label": "Client Name",
+			"name": "testimonial_client_name",
 			"aria-label": "",
 			"type": "text",
-			"instructions": "The client's company or organisation name.",
-			"required": 0,
+			"instructions": "Full name of the client — displayed on the card.",
+			"required": 1,
 			"conditional_logic": 0,
-			"wrapper": {
-				"width": "50",
-				"class": "",
-				"id": ""
-			},
+			"wrapper": { "width": "50", "class": "", "id": "" },
 			"default_value": "",
 			"maxlength": "",
-			"placeholder": "e.g. Acme Corp",
-			"prepend": "",
-			"append": ""
+			"placeholder": "e.g. Sarah Okeke"
 		},
 		{
-			"key": "field_testimonial_role",
-			"label": "Job Title / Role",
-			"name": "testimonial_role",
+			"key": "field_testimonial_designation",
+			"label": "Designation",
+			"name": "testimonial_designation",
 			"aria-label": "",
 			"type": "text",
-			"instructions": "The client's position at their company.",
+			"instructions": "Client's job title and company — displayed below the name.",
 			"required": 0,
 			"conditional_logic": 0,
-			"wrapper": {
-				"width": "50",
-				"class": "",
-				"id": ""
-			},
+			"wrapper": { "width": "50", "class": "", "id": "" },
 			"default_value": "",
-			"maxlength": "",
-			"placeholder": "e.g. Head of Product",
-			"prepend": "",
-			"append": ""
+			"placeholder": "e.g. CEO at Acme Corp"
+		},
+		{
+			"key": "field_testimonial_avatar",
+			"label": "Client Photo",
+			"name": "testimonial_avatar",
+			"aria-label": "",
+			"type": "image",
+			"instructions": "Client's profile photo — shown as the avatar on the testimonial card.",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": { "width": "50", "class": "", "id": "" },
+			"return_format": "array",
+			"library": "all",
+			"min_width": "",
+			"min_height": "",
+			"min_size": "",
+			"max_width": "",
+			"max_height": "",
+			"max_size": "",
+			"mime_types": "",
+			"preview_size": "thumbnail"
 		},
 		{
 			"key": "field_testimonial_rating",
@@ -51,11 +59,7 @@
 			"instructions": "Star rating displayed on the testimonial card.",
 			"required": 0,
 			"conditional_logic": 0,
-			"wrapper": {
-				"width": "25",
-				"class": "",
-				"id": ""
-			},
+			"wrapper": { "width": "50", "class": "", "id": "" },
 			"choices": {
 				"5.0": "★★★★★  5.0",
 				"4.5": "★★★★½  4.5",
@@ -70,6 +74,21 @@
 			"ui": 1,
 			"ajax": 0,
 			"placeholder": ""
+		},
+		{
+			"key": "field_testimonial_review",
+			"label": "Review Text",
+			"name": "testimonial_review",
+			"aria-label": "",
+			"type": "textarea",
+			"instructions": "The full testimonial review — displayed as the main quote on the card.",
+			"required": 1,
+			"conditional_logic": 0,
+			"wrapper": { "width": "100", "class": "", "id": "" },
+			"default_value": "",
+			"rows": 4,
+			"new_lines": "",
+			"placeholder": "e.g. The team delivered beyond what we imagined. Within two months of launch our inbound lead volume doubled..."
 		}
 	],
 	"location": [
@@ -84,11 +103,10 @@
 	"menu_order": 0,
 	"position": "normal",
 	"style": "default",
-	"label_placement": "left",
+	"label_placement": "top",
 	"instruction_placement": "label",
 	"hide_on_screen": "",
 	"active": true,
-	"description": "Company, role, and star rating for each testimonial. Post Title = reviewer name. Excerpt = pull-quote on card. Content = full quote. Featured Image = company logo.",
-	"show_in_rest": 0,
-	"modified": 1718500001
+	"description": "Client name, designation, photo, rating and review text for each testimonial card.",
+	"show_in_rest": false
 }
