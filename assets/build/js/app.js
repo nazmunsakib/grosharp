@@ -875,7 +875,7 @@
 
 	/* ─── PAGE HERO (general — About, Work, Contact, Services) ───────────────── */
 	function initPageHero() {
-		var section = document.querySelector('.grosharp-page-hero');
+		var section = document.querySelector('.grosharp-page-hero, .grosharp-post-hero');
 		if (!section || !gs()) return;
 
 		var eyebrow = section.querySelector('[data-ph-eyebrow]');
@@ -1209,7 +1209,180 @@
 		initServiceShowcase();
 		/* Single service detail */
 		initServiceDetail();
+		/* Single project (case study) */
+		initProjectOverview();
+		initProjectDetail();
+		initProjectGallery();
+		initProjectResults();
+		initProjectNext();
 	});
+
+	/* ─────────────────────────────────────────────────────────────────────────
+	 * PROJECT DETAIL PAGE ANIMATIONS
+	 * ───────────────────────────────────────────────────────────────────────── */
+
+	/**
+	 * Project Overview — meta bar columns stagger in.
+	 */
+	function initProjectOverview() {
+		/* Tech stack tags in post-hero */
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+
+		var stackWrap = document.querySelector('[data-gs-ph-stack]');
+		if (stackWrap) {
+			var tags = stackWrap.querySelectorAll('span');
+			if (tags.length) {
+				gsap.fromTo(
+					tags,
+					{ opacity: 0, y: 12, scale: 0.92 },
+					{ opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.4)',
+					  stagger: 0.06, delay: 0.2,
+					  scrollTrigger: stConfig(stackWrap, { start: 'top 90%' }) }
+				);
+			}
+		}
+
+		/* Legacy project-overview meta items (kept in case block is re-added) */
+		var items = document.querySelectorAll('[data-gs-proj-meta]');
+		if (items.length) {
+			gsap.fromTo(
+				items,
+				{ opacity: 0, y: 16 },
+				{ opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', stagger: 0.08,
+				  scrollTrigger: stConfig(items[0], { start: 'top 88%' }) }
+			);
+		}
+	}
+
+	/**
+	 * Project Detail — challenge + solution rows slide up.
+	 */
+	function initProjectDetail() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+
+		var rows = document.querySelectorAll('[data-gs-pd-challenge],[data-gs-pd-solution]');
+		rows.forEach(function (row) {
+			gsap.fromTo(
+				row,
+				{ opacity: 0, y: 32 },
+				{ opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+				  scrollTrigger: stConfig(row, { start: 'top 84%' }) }
+			);
+		});
+	}
+
+	/**
+	 * Project Gallery — hero image scale-in, grid items stagger.
+	 */
+	function initProjectGallery() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+
+		var hero = document.querySelector('[data-gs-pg-hero]');
+		if (hero) {
+			gsap.fromTo(
+				hero,
+				{ opacity: 0, scale: 0.97 },
+				{ opacity: 1, scale: 1, duration: 1, ease: 'power3.out',
+				  scrollTrigger: stConfig(hero, { start: 'top 86%' }) }
+			);
+		}
+
+		var gridItems = document.querySelectorAll('[data-gs-pg-grid-item]');
+		if (gridItems.length) {
+			gsap.fromTo(
+				gridItems,
+				{ opacity: 0, y: 28 },
+				{ opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', stagger: 0.1,
+				  scrollTrigger: stConfig(gridItems[0], { start: 'top 86%' }) }
+			);
+		}
+	}
+
+	/**
+	 * Project Results — header reveal + metric cards stagger (mirrors about-values).
+	 */
+	function initProjectResults() {
+		if (!ok()) return;
+
+		var section = document.querySelector('.grosharp-project-results');
+		if (!section) return;
+
+		/* Section header: eyebrow pill + heading slide up */
+		var eyebrow = section.querySelector('[data-gs-pr-eyebrow]');
+		var heading  = section.querySelector('[data-gs-pr-heading]');
+
+		if (eyebrow) {
+			gs().fromTo(eyebrow,
+				{ opacity: 0, y: 18 },
+				{ opacity: 1, y: 0, duration: 0.55, ease: 'power2.out',
+				  scrollTrigger: stConfig(section, { start: 'top 88%' }) }
+			);
+		}
+		if (heading) {
+			gs().fromTo(heading,
+				{ opacity: 0, y: 24 },
+				{ opacity: 1, y: 0, duration: 0.65, ease: 'power3.out', delay: 0.1,
+				  scrollTrigger: stConfig(section, { start: 'top 88%' }) }
+			);
+		}
+
+		/* Cards cascade in with stagger — icons scale up inside each card */
+		var cards = section.querySelectorAll('[data-gs-value-card]');
+		var icons = section.querySelectorAll('.about-value-icon');
+		if (!cards.length) return;
+
+		gs().set(icons, { scale: 0.75, opacity: 0 });
+		gs().fromTo(cards,
+			{ opacity: 0, y: 40 },
+			{
+				opacity: 1, y: 0,
+				duration: 0.8, ease: 'power3.out',
+				stagger: 0.12,
+				scrollTrigger: stConfig(cards[0], { start: 'top 88%' }),
+				onStart: function () {
+					gs().fromTo(icons,
+						{ scale: 0.75, opacity: 0 },
+						{ scale: 1, opacity: 1, duration: 0.55, ease: 'back.out(1.6)', stagger: 0.12, delay: 0.2 }
+					);
+				},
+			}
+		);
+	}
+
+	/**
+	 * Project Next — title slides up, arrow pulses.
+	 */
+	function initProjectNext() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+
+		var section = document.querySelector('.grosharp-project-next');
+		if (!section) return;
+
+		var title = section.querySelector('[data-gs-pn-title]');
+		var arrow = section.querySelector('[data-gs-pn-arrow]');
+
+		if (title) {
+			gsap.fromTo(
+				title,
+				{ opacity: 0, y: 40 },
+				{ opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+				  scrollTrigger: stConfig(section, { start: 'top 80%' }) }
+			);
+		}
+
+		if (arrow) {
+			gsap.fromTo(
+				arrow,
+				{ opacity: 0, x: -20 },
+				{ opacity: 1, x: 0, duration: 0.7, ease: 'back.out(1.5)',
+				  delay: 0.25, scrollTrigger: stConfig(section, { start: 'top 80%' }) }
+			);
+		}
+	}
 })();
 
 // BOOT already declared above — initPageHero appended here and called in DOMContentLoaded above
