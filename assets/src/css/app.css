@@ -688,6 +688,130 @@ body.gs-menu-open {
 .wg-card--hidden { display: none; }
 .wg-filter-btn.is-active { background: #654cff; border-color: #654cff; color: #ffffff; }
 
+/* ── Single post: 2-col layout (TOC sidebar + content) ─────────────────────
+   .gs-post-body creates a sticky-sidebar layout on desktop.
+   TOC hides on tablet/mobile — content goes full-width.
+   ─────────────────────────────────────────────────────────────────────── */
+.gs-post-body {
+	display: grid;
+	grid-template-columns: 220px minmax(0, 760px);
+	justify-content: center;
+	align-items: start;
+	gap: 0 clamp(2.5rem, 4vw, 4rem);
+	padding: 0;
+}
+
+/* Always lock each block to its column — prevents content collapsing to 220px */
+.gs-post-body > .grosharp-post-toc      { grid-column: 1; }
+.gs-post-body > .wp-block-post-content  { grid-column: 2; margin-top: 0; padding-top: 0; }
+
+@media (max-width: 1079px) {
+	.gs-post-body {
+		grid-template-columns: 1fr;
+		max-width: 760px;
+		margin-inline: auto;
+	}
+	.gs-post-body > .grosharp-post-toc      { display: none; }
+	.gs-post-body > .wp-block-post-content  { grid-column: 1; }
+}
+
+/* ── Post TOC sidebar ───────────────────────────────────────────────────── */
+.grosharp-post-toc {
+	position: sticky;
+	top: 96px;
+	height: fit-content;
+	padding-top: 2rem;
+}
+
+.gs-toc-inner {
+	background: #ffffff;
+	border: 1px solid rgba(13, 13, 18, 0.08);
+	border-radius: 1rem;
+	padding: 1.25rem 1.25rem 1.5rem;
+	box-shadow: 0 4px 20px rgba(101, 76, 255, 0.05);
+}
+
+.gs-toc-title {
+	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: #9a9ab0;
+	margin: 0 0 0.875rem;
+}
+
+.gs-toc-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.gs-toc-item {
+	border-left: 2px solid transparent;
+	transition: border-color 0.2s;
+}
+
+.gs-toc-item--sub {
+	padding-left: 0.75rem;
+}
+
+.gs-toc-item.is-active {
+	border-left-color: #654cff;
+}
+
+.gs-toc-link {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+	padding: 0.375rem 0.625rem;
+	border-radius: 0.375rem;
+	text-decoration: none;
+	transition: background 0.15s, color 0.15s;
+}
+
+.gs-toc-link:hover {
+	background: rgba(101, 76, 255, 0.05);
+}
+
+.gs-toc-num {
+	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
+	font-size: 0.6875rem;
+	font-weight: 600;
+	color: #c4c4d4;
+	flex-shrink: 0;
+	transition: color 0.2s;
+	line-height: 1.6;
+}
+
+.gs-toc-text {
+	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
+	font-size: 0.8125rem;
+	font-weight: 500;
+	line-height: 1.5;
+	color: #5c5d6d;
+	transition: color 0.2s;
+}
+
+.gs-toc-item.is-active .gs-toc-num,
+.gs-toc-link:hover .gs-toc-num {
+	color: #654cff;
+}
+
+.gs-toc-item.is-active .gs-toc-text,
+.gs-toc-link:hover .gs-toc-text {
+	color: #654cff;
+	font-weight: 600;
+}
+
+.gs-toc-item--sub .gs-toc-text {
+	font-size: 0.75rem;
+	color: #9a9ab0;
+}
+
 /* ── Post content body group padding ───────────────────────────────────────
    Applies gs-container–equivalent padding to non-full-width groups inside
    wp:post-content so body text aligns with every other site section.

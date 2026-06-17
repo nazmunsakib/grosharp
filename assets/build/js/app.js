@@ -1215,6 +1215,12 @@
 		initProjectGallery();
 		initProjectResults();
 		initProjectNext();
+		/* Blog archive + single post */
+		initBlogGrid();
+		initPostMetaBar();
+		initPostAuthorCard();
+		initBlogRelated();
+		initPostTOC();
 	});
 
 	/* ─────────────────────────────────────────────────────────────────────────
@@ -1383,6 +1389,177 @@
 			);
 		}
 	}
+
+	/* ─────────────────────────────────────────────────────────────────────────
+	 * BLOG ANIMATIONS
+	 * ───────────────────────────────────────────────────────────────────────── */
+
+	/**
+	 * Blog Grid — filter pills fade in, cards stagger up.
+	 */
+	function initBlogGrid() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+
+		var section = document.querySelector('.grosharp-blog-grid');
+		if (!section) return;
+
+		/* Filter pills */
+		var filters = section.querySelector('[data-gs-bg-filters]');
+		if (filters) {
+			gsap.fromTo(
+				filters,
+				{ opacity: 0, y: -14 },
+				{ opacity: 1, y: 0, duration: 0.6, ease: 'power2.out',
+				  scrollTrigger: stConfig(section, { start: 'top 85%' }) }
+			);
+		}
+
+		/* Cards */
+		var cards = section.querySelectorAll('[data-gs-bg-card]');
+		if (!cards.length) return;
+		gsap.fromTo(
+			cards,
+			{ opacity: 0, y: 36 },
+			{
+				opacity: 1, y: 0,
+				duration: 0.75, ease: 'power3.out',
+				stagger: 0.1,
+				scrollTrigger: stConfig(cards[0], { start: 'top 88%' }),
+			}
+		);
+	}
+
+	/**
+	 * Post Meta Bar — slides down under the hero.
+	 */
+	function initPostMetaBar() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+
+		var bar = document.querySelector('[data-gs-pmb]');
+		if (!bar) return;
+
+		gsap.fromTo(
+			bar,
+			{ opacity: 0, y: -10 },
+			{ opacity: 1, y: 0, duration: 0.55, ease: 'power2.out',
+			  scrollTrigger: stConfig(bar, { start: 'top 95%' }) }
+		);
+	}
+
+	/**
+	 * Post Author Card — slides up with a subtle scale.
+	 */
+	function initPostAuthorCard() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+
+		var card = document.querySelector('[data-gs-author-card]');
+		if (!card) return;
+
+		gsap.fromTo(
+			card,
+			{ opacity: 0, y: 32, scale: 0.97 },
+			{ opacity: 1, y: 0, scale: 1,
+			  duration: 0.8, ease: 'power3.out',
+			  scrollTrigger: stConfig(card, { start: 'top 88%' }) }
+		);
+	}
+
+	/**
+	 * Post TOC — IntersectionObserver highlights the active heading in the sidebar.
+	 */
+	function initPostTOC() {
+		var toc = document.querySelector('.grosharp-post-toc');
+		if (!toc) return;
+
+		var items   = Array.from(toc.querySelectorAll('[data-toc-item]'));
+		var content = document.querySelector('.wp-block-post-content');
+		if (!items.length || !content) return;
+
+		/* Gather all heading elements referenced by the TOC */
+		var headings = items.map(function (li) {
+			return document.getElementById(li.dataset.tocItem);
+		}).filter(Boolean);
+
+		if (!headings.length) return;
+
+		var activeId = null;
+
+		function setActive(id) {
+			if (activeId === id) return;
+			activeId = id;
+			items.forEach(function (li) {
+				li.classList.toggle('is-active', li.dataset.tocItem === id);
+			});
+		}
+
+		/* Use IntersectionObserver to track which heading is in view */
+		var observer = new IntersectionObserver(
+			function (entries) {
+				entries.forEach(function (entry) {
+					if (entry.isIntersecting) {
+						setActive(entry.target.id);
+					}
+				});
+			},
+			{ rootMargin: '-10% 0px -80% 0px', threshold: 0 }
+		);
+
+		headings.forEach(function (h) { observer.observe(h); });
+
+		/* Smooth scroll on TOC link click */
+		toc.querySelectorAll('.gs-toc-link').forEach(function (link) {
+			link.addEventListener('click', function (e) {
+				var targetId = this.getAttribute('href').slice(1);
+				var target   = document.getElementById(targetId);
+				if (!target) return;
+				e.preventDefault();
+				var offset = 88; /* header height */
+				var top    = target.getBoundingClientRect().top + window.scrollY - offset;
+				window.scrollTo({ top: top, behavior: 'smooth' });
+				setActive(targetId);
+			});
+		});
+	}
+
+	/**
+	 * Blog Related Posts — heading slides left, cards stagger up.
+	 */
+	function initBlogRelated() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+
+		var section = document.querySelector('.grosharp-blog-related');
+		if (!section) return;
+
+		var header = section.querySelector('[data-gs-related-header]');
+		var cards  = section.querySelectorAll('[data-gs-related-card]');
+
+		if (header) {
+			gsap.fromTo(
+				header,
+				{ opacity: 0, y: 24 },
+				{ opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+				  scrollTrigger: stConfig(section, { start: 'top 85%' }) }
+			);
+		}
+
+		if (cards.length) {
+			gsap.fromTo(
+				cards,
+				{ opacity: 0, y: 40 },
+				{
+					opacity: 1, y: 0,
+					duration: 0.75, ease: 'power3.out',
+					stagger: 0.12,
+					scrollTrigger: stConfig(cards[0], { start: 'top 90%' }),
+				}
+			);
+		}
+	}
+
 })();
 
 // BOOT already declared above — initPageHero appended here and called in DOMContentLoaded above

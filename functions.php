@@ -35,3 +35,46 @@ add_filter( 'acf/settings/load_json', static function ( array $paths ) {
 	return $paths;
 } );
 
+/* ── ONE-TIME: reset saved FSE templates so theme files take over ────────── */
+add_action( 'init', static function () {
+	if ( get_option( 'grosharp_templates_reset_v2' ) ) return;
+	global $wpdb;
+	$ids = $wpdb->get_col(
+		"SELECT ID FROM {$wpdb->posts}
+		 WHERE post_type = 'wp_template'
+		   AND post_name IN ('single','home','archive')
+		   AND post_status != 'auto-draft'"
+	);
+	foreach ( $ids as $id ) {
+		wp_delete_post( (int) $id, true );
+	}
+	update_option( 'grosharp_templates_reset_v2', 1 );
+} );
+
+/* ── Auto-add IDs to headings for TOC anchor links ──────────────────────── */
+add_filter( 'the_content', static function ( string $content ): string {
+	if ( ! is_singular( 'post' ) ) {
+		return $content;
+	}
+	$used = array();
+	return preg_replace_callback(
+		'/<(h[23])([^>]*)>(.*?)<\/\1>/is',
+		static function ( array $m ) use ( &$used ): string {
+			[ , $tag, $attrs, $inner ] = $m;
+			/* Skip if already has an id */
+			if ( preg_match( '/\bid=["\']/', $attrs ) ) {
+				return $m[0];
+			}
+			$base  = sanitize_title( wp_strip_all_tags( $inner ) );
+			$id    = $base;
+			$count = 1;
+			while ( in_array( $id, $used, true ) ) {
+				$id = $base . '-' . $count++;
+			}
+			$used[] = $id;
+			return "<{$tag}{$attrs} id=\"{$id}\">{$inner}</{$tag}>";
+		},
+		$content
+	);
+} );
+
