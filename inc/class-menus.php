@@ -28,6 +28,7 @@ final class Grosharp_Menus {
 	public function register(): void {
 		add_action( 'init',      array( $this, 'register_shortcodes' ) );
 		add_action( 'wp_footer', array( $this, 'render_mobile_overlay' ) );
+		add_filter( 'wp_nav_menu_objects', array( $this, 'mark_cpt_current' ), 10, 2 );
 	}
 
 	/* ── Shortcode registration ─────────────────────────────────────────── */
@@ -205,6 +206,64 @@ final class Grosharp_Menus {
 
 			. '</div>'
 			. '</div>';
+	}
+
+	/**
+	 * Mark CPT archive/single menu items as current when WordPress misses them.
+	 *
+	 * WordPress doesn't auto-set current-menu-item on custom post type pages
+	 * unless the menu item links to the archive and the CPT has has_archive set.
+	 * This filter catches grosharp_service and grosharp_project CPTs.
+	 *
+	 * @param \WP_Post[] $items  Nav menu item objects.
+	 * @param \stdClass  $args   wp_nav_menu() args.
+	 * @return \WP_Post[]
+	 */
+	public function mark_cpt_current( array $items, $args ): array {
+		if ( ! is_singular() && ! is_post_type_archive() ) {
+			return $items;
+		}
+
+		$post_type = get_post_type();
+
+		/* Map CPT slug → URL patterns that should be considered "current" */
+		$cpt_map = array(
+			'grosharp_service' => array( '/services/', '/grosharp_service/' ),
+			'grosharp_project' => array( '/case-studies/', '/work/', '/grosharp_project/' ),
+		);
+
+		$match_urls = array();
+		if ( $post_type && isset( $cpt_map[ $post_type ] ) ) {
+			$match_urls = $cpt_map[ $post_type ];
+		}
+
+		/* Also match when viewing an archive of these CPTs */
+		if ( is_post_type_archive( array_keys( $cpt_map ) ) ) {
+			$queried = get_queried_object();
+			if ( $queried && isset( $cpt_map[ $queried->name ] ) ) {
+				$match_urls = $cpt_map[ $queried->name ];
+			}
+		}
+
+		if ( empty( $match_urls ) ) {
+			return $items;
+		}
+
+		foreach ( $items as $item ) {
+			if ( empty( $item->url ) ) {
+				continue;
+			}
+			$item_path = wp_parse_url( $item->url, PHP_URL_PATH ) ?? '';
+			foreach ( $match_urls as $pattern ) {
+				if ( rtrim( $item_path, '/' ) === rtrim( $pattern, '/' ) ) {
+					$item->current               = true;
+					$item->current_item_ancestor = true;
+					break;
+				}
+			}
+		}
+
+		return $items;
 	}
 
 	/* ── Private helpers ────────────────────────────────────────────────── */

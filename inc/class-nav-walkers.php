@@ -27,9 +27,13 @@ class Grosharp_Primary_Nav_Walker extends Walker_Nav_Menu {
 	 * @param int           $current_object_id
 	 */
 	public function start_el( &$output, $data_object, $depth = 0, $args = null, $current_object_id = 0 ): void {
+		$is_current = ! empty( $data_object->current ) || ! empty( $data_object->current_item_ancestor );
+		$color      = $is_current ? 'text-[#654cff]' : 'text-brand-dark hover:text-brand-primary';
+
 		$output .= sprintf(
-			'<a href="%s" class="font-body text-[15px] font-semibold text-brand-dark no-underline transition-colors duration-150 hover:text-brand-primary px-3 py-1.5">%s</a>',
+			'<a href="%s" class="font-body text-[15px] font-semibold %s no-underline transition-colors duration-150 px-3 py-1.5">%s</a>',
 			esc_url( $data_object->url ?? '#' ),
+			esc_attr( $color ),
 			esc_html( $data_object->title ?? '' )
 		);
 	}
