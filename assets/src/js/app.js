@@ -626,43 +626,6 @@
 		});
 	}
 
-	/* ═══════════════════════════════════════════════════════════════════════
-	   CUSTOM CURSOR
-	═══════════════════════════════════════════════════════════════════════ */
-	function initCustomCursor() {
-		if (prefersReducedMotion || !gs()) return;
-		if (!window.matchMedia('(pointer: fine)').matches) return;
-
-		var dot  = document.createElement('div');
-		var ring = document.createElement('div');
-		dot.id   = 'gs-cursor-dot';
-		ring.id  = 'gs-cursor-ring';
-		document.body.appendChild(dot);
-		document.body.appendChild(ring);
-		document.body.classList.add('gs-cursor-ready');
-
-		var dotX  = gs().quickTo(dot,  'x', { duration: 0.08, ease: 'none' });
-		var dotY  = gs().quickTo(dot,  'y', { duration: 0.08, ease: 'none' });
-		var ringX = gs().quickTo(ring, 'x', { duration: 0.38, ease: 'power3.out' });
-		var ringY = gs().quickTo(ring, 'y', { duration: 0.38, ease: 'power3.out' });
-
-		document.addEventListener('mousemove', function (e) { dotX(e.clientX); dotY(e.clientY); ringX(e.clientX); ringY(e.clientY); });
-
-		var sel = 'a, button, [role="button"], label, input, select, textarea, .gs-card, [data-gs-project-card]';
-		function wire(el) {
-			el.addEventListener('mouseenter', function () { document.body.classList.add('gs-cursor-hover'); });
-			el.addEventListener('mouseleave', function () { document.body.classList.remove('gs-cursor-hover'); });
-		}
-		document.querySelectorAll(sel).forEach(wire);
-		new MutationObserver(function (ms) {
-			ms.forEach(function (m) { m.addedNodes.forEach(function (n) { if (n.nodeType !== 1) return; if (n.matches && n.matches(sel)) wire(n); n.querySelectorAll && n.querySelectorAll(sel).forEach(wire); }); });
-		}).observe(document.body, { childList: true, subtree: true });
-
-		document.addEventListener('mousedown', function () { document.body.classList.add('gs-cursor-click'); });
-		document.addEventListener('mouseup',   function () { document.body.classList.remove('gs-cursor-click'); });
-		document.addEventListener('mouseleave', function () { gs().to([dot, ring], { opacity: 0, duration: 0.3 }); });
-		document.addEventListener('mouseenter', function () { gs().to([dot, ring], { opacity: 1, duration: 0.3 }); });
-	}
 
 	/* ═══════════════════════════════════════════════════════════════════════
 	   MAGNETIC BUTTONS
@@ -1177,8 +1140,7 @@
 
 		initHeaderScroll();
 		initMobileMenu();
-		initCustomCursor();
-		initMagneticButtons();
+			initMagneticButtons();
 		initSmoothScroll();
 		initHeroEntrance();
 		initHeroParallax();

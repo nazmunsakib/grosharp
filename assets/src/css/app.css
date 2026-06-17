@@ -191,69 +191,6 @@
 	}
 }
 
-/* ── Custom cursor ───────────────────────────────────────────────────────── */
-/* Only shown on devices with a fine pointer (mouse) */
-@media (pointer: fine) {
-	body.gs-cursor-ready {
-		cursor: none;
-	}
-
-	body.gs-cursor-ready a,
-	body.gs-cursor-ready button,
-	body.gs-cursor-ready [role="button"],
-	body.gs-cursor-ready label,
-	body.gs-cursor-ready input,
-	body.gs-cursor-ready select,
-	body.gs-cursor-ready textarea {
-		cursor: none;
-	}
-}
-
-#gs-cursor-dot,
-#gs-cursor-ring {
-	position: fixed;
-	top: 0;
-	left: 0;
-	pointer-events: none;
-	z-index: 99999;
-	border-radius: 50%;
-	transform: translate(-50%, -50%);
-	will-change: transform;
-	transition: opacity 0.3s;
-}
-
-#gs-cursor-dot {
-	width: 7px;
-	height: 7px;
-	background: var(--grosharp-violet);
-}
-
-#gs-cursor-ring {
-	width: 32px;
-	height: 32px;
-	border: 1.5px solid var(--grosharp-violet);
-	opacity: 0.55;
-	transition: width 0.25s ease, height 0.25s ease, opacity 0.3s, border-color 0.25s;
-}
-
-/* Hover state: ring expands */
-body.gs-cursor-hover #gs-cursor-ring {
-	width: 48px;
-	height: 48px;
-	opacity: 0.35;
-	border-color: var(--grosharp-violet);
-}
-
-/* Click state */
-body.gs-cursor-click #gs-cursor-dot {
-	transform: translate(-50%, -50%) scale(0.7);
-}
-
-body.gs-cursor-click #gs-cursor-ring {
-	width: 24px;
-	height: 24px;
-	opacity: 0.6;
-}
 
 @media (prefers-reduced-motion: reduce) {
 	html {
@@ -265,10 +202,6 @@ body.gs-cursor-click #gs-cursor-ring {
 		transform: none;
 	}
 
-	#gs-cursor-dot,
-	#gs-cursor-ring {
-		display: none;
-	}
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
