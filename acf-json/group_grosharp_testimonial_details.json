@@ -76,6 +76,20 @@
 			"placeholder": ""
 		},
 		{
+			"key": "field_testimonial_title",
+			"label": "Review Title",
+			"name": "testimonial_title",
+			"aria-label": "",
+			"type": "text",
+			"instructions": "Short bold headline for the card — e.g. \"Outstanding work from start to finish.\"",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": { "width": "100", "class": "", "id": "" },
+			"default_value": "",
+			"maxlength": 100,
+			"placeholder": "e.g. Outstanding work from start to finish."
+		},
+		{
 			"key": "field_testimonial_review",
 			"label": "Review Text",
 			"name": "testimonial_review",
