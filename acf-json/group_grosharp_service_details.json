@@ -61,26 +61,6 @@
 			"placeholder": "Learn More",
 			"prepend": "",
 			"append": ""
-		},
-		{
-			"key": "field_service_stats",
-			"label": "Service Stats",
-			"name": "service_stats",
-			"aria-label": "",
-			"type": "textarea",
-			"instructions": "One stat per line — format: value|label. Example:\n50+|Projects Delivered\n98%|Client Satisfaction\n3x|Average ROI\n\nMax 3 lines shown.",
-			"required": 0,
-			"conditional_logic": 0,
-			"wrapper": {
-				"width": "",
-				"class": "",
-				"id": ""
-			},
-			"default_value": "",
-			"maxlength": "",
-			"rows": 4,
-			"placeholder": "50+|Projects Delivered\n98%|Client Satisfaction\n3x|Average ROI",
-			"new_lines": ""
 		}
 	],
 	"location": [
