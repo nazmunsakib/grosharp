@@ -72,7 +72,7 @@ final class Grosharp_Menus {
 			. '<rect y="15" width="20" height="2" rx="1" fill="currentColor"/>'
 			. '</svg>';
 
-		return '<nav class="hidden rounded-full bg-[#f7f5ff] px-1 py-1 lg:flex lg:items-center lg:gap-1" aria-label="Primary navigation">'
+		return '<nav class="gs-primary-nav hidden rounded-full bg-[#f7f5ff] px-1 py-1 lg:flex lg:items-center lg:gap-1" aria-label="Primary navigation">'
 			. $links
 			. '</nav>'
 			. '<button id="gs-menu-open" '
@@ -153,16 +153,57 @@ final class Grosharp_Menus {
 				'fallback_cb'    => false,
 				'items_wrap'     => '%3$s',
 				'walker'         => new class extends Walker_Nav_Menu {
+					private bool $in_dropdown = false;
+					private int  $idx         = 0;
+
 					public function start_el( &$output, $data_object, $depth = 0, $args = null, $current_object_id = 0 ): void {
-						$output .= sprintf(
-							'<a href="%s" class="gs-mobile-nav-link">%s</a>',
-							esc_url( $data_object->url ?? '#' ),
-							esc_html( $data_object->title ?? '' )
-						);
+						$url          = $data_object->url ?? '#';
+						$title        = $data_object->title ?? '';
+						$has_children = in_array( 'menu-item-has-children', (array) ( $data_object->classes ?? array() ), true );
+
+						if ( $depth === 0 ) {
+							if ( $has_children ) {
+								$this->in_dropdown = true;
+								$this->idx++;
+								$list_id = 'gs-mob-list-' . $this->idx;
+								$chevron = '<svg class="gs-mob-dropdown-chevron w-5 h-5 flex-none" viewBox="0 0 20 20" fill="none" aria-hidden="true">'
+									. '<path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+								$output .= '<div class="gs-mob-dropdown-item border-b border-black/[0.07]">';
+								$output .= '<div class="flex items-center justify-between">';
+								$output .= sprintf( '<a href="%s" class="gs-mobile-nav-link border-b-0 flex-1">%s</a>', esc_url( $url ), esc_html( $title ) );
+								$output .= '<button class="gs-mob-dropdown-toggle flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#f4f3ff] transition-colors" aria-expanded="false" aria-controls="' . esc_attr( $list_id ) . '">'
+									. $chevron . '</button>';
+								$output .= '</div>';
+								$output .= '<ul class="gs-mob-dropdown-list" id="' . esc_attr( $list_id ) . '" aria-hidden="true">';
+								/* depth-1 items added by walker */
+							} else {
+								$this->in_dropdown = false;
+								$output .= sprintf( '<a href="%s" class="gs-mobile-nav-link">%s</a>', esc_url( $url ), esc_html( $title ) );
+							}
+						} elseif ( $depth === 1 ) {
+							$output .= sprintf(
+								'<li><a href="%s" class="flex items-center gap-3 py-2.5 font-body text-[1rem] font-medium text-[#3a3a4c] no-underline hover:text-[#654cff] transition-colors">'
+								. '<span class="inline-block w-1.5 h-1.5 rounded-full bg-[rgba(101,76,255,0.4)] flex-none"></span>%s</a></li>',
+								esc_url( $url ),
+								esc_html( $title )
+							);
+						}
 					}
+
 					public function start_lvl( &$output, $depth = 0, $args = null ): void {}
-					public function end_lvl( &$output, $depth = 0, $args = null ): void {}
-					public function end_el( &$output, $data_object, $depth = 0, $args = null ): void {}
+
+					public function end_lvl( &$output, $depth = 0, $args = null ): void {
+						if ( $depth === 0 ) {
+							$output .= '</ul>'; /* /gs-mob-dropdown-list */
+						}
+					}
+
+					public function end_el( &$output, $data_object, $depth = 0, $args = null ): void {
+						if ( $depth === 0 && $this->in_dropdown ) {
+							$output .= '</div>'; /* /gs-mob-dropdown-item */
+							$this->in_dropdown = false;
+						}
+					}
 				},
 			) )
 			: '<a href="/" class="gs-mobile-nav-link">Home</a>'

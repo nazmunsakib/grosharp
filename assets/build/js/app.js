@@ -700,6 +700,266 @@
 	}
 
 	/* ═══════════════════════════════════════════════════════════════════════
+	   NAV DROPDOWN MENUS
+	   Applies to ANY nav item that has WordPress child items.
+	   Desktop: hover/click opens a floating .gs-mega-panel via GSAP.
+	   Mobile:  tap .gs-mob-dropdown-toggle to expand inline child list.
+
+	   POSITIONING: .gs-primary-nav is position:relative — the CSS containing block.
+	   .gs-dropdown-item is position:static so the panel escapes the trigger.
+	   centerPanel() sets left = (viewport/2) − (panelW/2) − navRect.left,
+	   which horizontally centres the panel in the full-width header.
+	   GSAP animates y + scale + opacity only — left is set once by JS.
+	═══════════════════════════════════════════════════════════════════════ */
+	function initDropdownMenus() {
+		var gsap = gs();
+
+		/* ── Centre panel in the full-width header (viewport centre) ─── */
+		function centerPanel(nav, panel) {
+			var navRect  = nav.getBoundingClientRect();
+			var panelW   = panel.offsetWidth || 780;
+			/* Target: viewport centre minus nav left edge */
+			var target   = (window.innerWidth / 2) - (panelW / 2) - navRect.left;
+			/* Clamp so panel never bleeds off screen */
+			var minLeft  = -navRect.left + 8;
+			var maxLeft  = window.innerWidth - navRect.left - panelW - 8;
+			return Math.max(minLeft, Math.min(maxLeft, target));
+		}
+
+		/* ── Desktop — wire up every dropdown item ───────────────────── */
+		document.querySelectorAll('.gs-dropdown-item').forEach(function (wrap) {
+			var trigger  = wrap.querySelector('.gs-dropdown-trigger');
+			var panel    = wrap.querySelector('.gs-mega-panel');
+			if (!trigger || !panel) return;
+
+			/* .gs-primary-nav is the containing block */
+			var nav      = wrap.closest('.gs-primary-nav') || wrap.parentElement;
+			var chevron  = trigger.querySelector('.gs-dropdown-chevron');
+			var navItems = Array.prototype.slice.call(panel.querySelectorAll('.gs-mega-nav-item'));
+			var panes    = Array.prototype.slice.call(panel.querySelectorAll('.gs-mega-preview-pane'));
+			var isOpen   = false;
+
+			/* Initial GSAP state */
+			if (gsap) {
+				gsap.set(panel, {
+					opacity: 0, y: -14, scale: 0.96,
+					transformOrigin: 'top center',
+				});
+			}
+
+			/* ── Preview swap: left nav hover/focus → right pane ──────── */
+			function activateItem(index) {
+				navItems.forEach(function (btn, j) {
+					var active = j === index;
+					btn.classList.toggle('is-active', active);
+					btn.setAttribute('aria-selected', active ? 'true' : 'false');
+				});
+				panes.forEach(function (pane, j) {
+					var active = j === index;
+					if (active) {
+						pane.classList.add('is-active');
+						pane.setAttribute('aria-hidden', 'false');
+						if (gsap) {
+							gsap.killTweensOf(pane);
+							gsap.fromTo(
+								pane,
+								{ opacity: 0, x: 10 },
+								{ opacity: 1, x: 0, duration: 0.22, ease: 'power2.out' }
+							);
+						}
+					} else {
+						pane.classList.remove('is-active');
+						pane.setAttribute('aria-hidden', 'true');
+					}
+				});
+			}
+
+			/* Wire nav items */
+			navItems.forEach(function (btn, i) {
+				btn.addEventListener('mouseenter', function () { activateItem(i); });
+				btn.addEventListener('focus',      function () { activateItem(i); });
+			});
+
+			/* ── Panel open / close ──────────────────────────────────── */
+			function openPanel() {
+				if (isOpen) return;
+				isOpen = true;
+				panel.style.left          = centerPanel(nav, panel) + 'px';
+				panel.style.visibility    = 'visible';
+				panel.style.pointerEvents = 'auto';
+				trigger.setAttribute('aria-expanded', 'true');
+				panel.setAttribute('aria-hidden', 'false');
+				/* Activate first item on open */
+				activateItem(0);
+				if (gsap) {
+					gsap.killTweensOf(panel);
+					gsap.to(panel, {
+						opacity: 1, y: 0, scale: 1,
+						duration: 0.32, ease: 'expo.out',
+					});
+					if (chevron) gsap.to(chevron, { rotation: 180, duration: 0.25, ease: 'power2.out' });
+				}
+			}
+
+			function closePanel() {
+				if (!isOpen) return;
+				isOpen = false;
+				trigger.setAttribute('aria-expanded', 'false');
+				panel.setAttribute('aria-hidden', 'true');
+				if (gsap) {
+					gsap.killTweensOf(panel);
+					gsap.to(panel, {
+						opacity: 0, y: -14, scale: 0.96,
+						duration: 0.2, ease: 'power2.in',
+						onComplete: function () {
+							panel.style.visibility    = 'hidden';
+							panel.style.pointerEvents = 'none';
+						},
+					});
+					if (chevron) gsap.to(chevron, { rotation: 0, duration: 0.2, ease: 'power2.in' });
+				} else {
+					panel.style.visibility    = 'hidden';
+					panel.style.pointerEvents = 'none';
+				}
+			}
+
+			/* Hover (pointer devices) */
+			if (window.matchMedia('(hover: hover)').matches) {
+				wrap.addEventListener('mouseenter', openPanel);
+				wrap.addEventListener('mouseleave', closePanel);
+			}
+
+			/* Click / keyboard toggle */
+			trigger.addEventListener('click', function (e) {
+				e.stopPropagation();
+				isOpen ? closePanel() : openPanel();
+			});
+
+			/* Close on outside click */
+			document.addEventListener('click', function (e) {
+				if (!wrap.contains(e.target)) closePanel();
+			});
+
+			/* Close on Escape */
+			document.addEventListener('keydown', function (e) {
+				if (e.key === 'Escape' && isOpen) {
+					closePanel();
+					trigger.focus();
+				}
+			});
+
+			/* Close on any link click inside panel */
+			panel.querySelectorAll('a').forEach(function (link) {
+				link.addEventListener('click', closePanel);
+			});
+
+			/* Re-centre on resize */
+			window.addEventListener('resize', function () {
+				if (isOpen) panel.style.left = centerPanel(nav, panel) + 'px';
+			});
+		});
+
+		/* ── Simple dropdown (non-Services nav items with children) ─── */
+		document.querySelectorAll('.gs-simple-item').forEach(function (wrap) {
+			var trigger  = wrap.querySelector('.gs-dropdown-trigger');
+			var panel    = wrap.querySelector('.gs-simple-dropdown');
+			if (!trigger || !panel) return;
+
+			var chevron = trigger.querySelector('.gs-dropdown-chevron');
+			var isOpen  = false;
+
+			/* Centre over the trigger with xPercent:-50 (GSAP owns transform) */
+			if (gsap) {
+				gsap.set(panel, {
+					opacity: 0, y: -10, scale: 0.96,
+					xPercent: -50,
+					transformOrigin: 'top center',
+				});
+			}
+
+			function openSimple() {
+				if (isOpen) return;
+				isOpen = true;
+				panel.style.visibility    = 'visible';
+				panel.style.pointerEvents = 'auto';
+				trigger.setAttribute('aria-expanded', 'true');
+				panel.setAttribute('aria-hidden', 'false');
+				if (gsap) {
+					gsap.killTweensOf(panel);
+					gsap.to(panel, {
+						opacity: 1, y: 0, scale: 1,
+						xPercent: -50,
+						duration: 0.28, ease: 'expo.out',
+					});
+					if (chevron) gsap.to(chevron, { rotation: 180, duration: 0.22, ease: 'power2.out' });
+				}
+			}
+
+			function closeSimple() {
+				if (!isOpen) return;
+				isOpen = false;
+				trigger.setAttribute('aria-expanded', 'false');
+				panel.setAttribute('aria-hidden', 'true');
+				if (gsap) {
+					gsap.killTweensOf(panel);
+					gsap.to(panel, {
+						opacity: 0, y: -10, scale: 0.96,
+						xPercent: -50,
+						duration: 0.18, ease: 'power2.in',
+						onComplete: function () {
+							panel.style.visibility    = 'hidden';
+							panel.style.pointerEvents = 'none';
+						},
+					});
+					if (chevron) gsap.to(chevron, { rotation: 0, duration: 0.18, ease: 'power2.in' });
+				} else {
+					panel.style.visibility    = 'hidden';
+					panel.style.pointerEvents = 'none';
+				}
+			}
+
+			if (window.matchMedia('(hover: hover)').matches) {
+				wrap.addEventListener('mouseenter', openSimple);
+				wrap.addEventListener('mouseleave', closeSimple);
+			}
+
+			trigger.addEventListener('click', function (e) {
+				e.stopPropagation();
+				isOpen ? closeSimple() : openSimple();
+			});
+
+			document.addEventListener('click', function (e) {
+				if (!wrap.contains(e.target)) closeSimple();
+			});
+
+			document.addEventListener('keydown', function (e) {
+				if (e.key === 'Escape' && isOpen) { closeSimple(); trigger.focus(); }
+			});
+
+			panel.querySelectorAll('a').forEach(function (link) {
+				link.addEventListener('click', closeSimple);
+			});
+		});
+
+		/* ── Mobile — inline expand for every dropdown item ─────────── */
+		document.querySelectorAll('.gs-mob-dropdown-item').forEach(function (item) {
+			var toggle  = item.querySelector('.gs-mob-dropdown-toggle');
+			var list    = item.querySelector('.gs-mob-dropdown-list');
+			var chevron = toggle ? toggle.querySelector('.gs-mob-dropdown-chevron') : null;
+			if (!toggle || !list) return;
+
+			toggle.addEventListener('click', function () {
+				var open = list.classList.toggle('is-open');
+				toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+				if (chevron) chevron.classList.toggle('is-open', open);
+			});
+		});
+	}
+
+	/* Back-compat alias */
+	function initServicesMegaMenu() { initDropdownMenus(); }
+
+	/* ═══════════════════════════════════════════════════════════════════════
 	   ABOUT PAGE ANIMATIONS
 	═══════════════════════════════════════════════════════════════════════ */
 	function initAboutHero() {
@@ -1140,6 +1400,7 @@
 
 		initHeaderScroll();
 		initMobileMenu();
+		initServicesMegaMenu();
 			initMagneticButtons();
 		initSmoothScroll();
 		initHeroEntrance();
