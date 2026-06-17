@@ -42,6 +42,23 @@ add_action(
 		add_editor_style( 'assets/build/css/app.css' );
 		add_editor_style( 'assets/build/css/editor.css' );
 
+		/*
+		 * Custom image sizes.
+		 *
+		 * grosharp-hero     — full-width post/CPT hero banner (16:4.5)
+		 * grosharp-card-lg  — project/work/blog grid cards (16:10)
+		 * grosharp-card-sm  — related posts, latest-posts widget (3:2)
+		 * grosharp-gallery  — project gallery grid images (4:3)
+		 * grosharp-page-img — page-hero supporting images (1:1 square)
+		 * grosharp-og       — social / open-graph share image (1.91:1)
+		 */
+		add_image_size( 'grosharp-hero',     1440, 640,  true );
+		add_image_size( 'grosharp-card-lg',   900, 560,  true );
+		add_image_size( 'grosharp-card-sm',   480, 320,  true );
+		add_image_size( 'grosharp-gallery',  1200, 900,  true );
+		add_image_size( 'grosharp-page-img',  800, 800,  true );
+		add_image_size( 'grosharp-og',       1200, 630,  true );
+
 		register_nav_menus(
 			array(
 				'primary'      => __( 'Primary Menu', 'grosharp' ),
