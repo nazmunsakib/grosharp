@@ -37,18 +37,18 @@ add_filter( 'acf/settings/load_json', static function ( array $paths ) {
 
 /* ── ONE-TIME: reset saved FSE templates so theme files take over ────────── */
 add_action( 'init', static function () {
-	if ( get_option( 'grosharp_templates_reset_v2' ) ) return;
+	if ( get_option( 'grosharp_templates_reset_v3' ) ) return;
 	global $wpdb;
 	$ids = $wpdb->get_col(
 		"SELECT ID FROM {$wpdb->posts}
 		 WHERE post_type = 'wp_template'
-		   AND post_name IN ('single','home','archive')
+		   AND post_name IN ('single','home','archive','page-contact')
 		   AND post_status != 'auto-draft'"
 	);
 	foreach ( $ids as $id ) {
 		wp_delete_post( (int) $id, true );
 	}
-	update_option( 'grosharp_templates_reset_v2', 1 );
+	update_option( 'grosharp_templates_reset_v3', 1 );
 } );
 
 /* ── Auto-add IDs to headings for TOC anchor links ──────────────────────── */

@@ -1215,6 +1215,9 @@
 		initProjectGallery();
 		initProjectResults();
 		initProjectNext();
+		/* Contact page */
+		initContactMethods();
+		initContactDetails();
 		/* Blog archive + single post */
 		initBlogGrid();
 		initPostMetaBar();
@@ -1465,6 +1468,64 @@
 			  duration: 0.8, ease: 'power3.out',
 			  scrollTrigger: stConfig(card, { start: 'top 88%' }) }
 		);
+	}
+
+	/* ─────────────────────────────────────────────────────────────────────────
+	 * CONTACT PAGE ANIMATIONS
+	 * ───────────────────────────────────────────────────────────────────────── */
+
+	/**
+	 * Contact Methods — cards stagger up.
+	 */
+	function initContactMethods() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+		var cards = document.querySelectorAll('[data-gs-cm-card]');
+		if (!cards.length) return;
+		gsap.fromTo(
+			cards,
+			{ opacity: 0, y: 40 },
+			{
+				opacity: 1, y: 0,
+				duration: 0.8, ease: 'power3.out',
+				stagger: 0.12,
+				scrollTrigger: stConfig(cards[0], { start: 'top 85%' }),
+			}
+		);
+	}
+
+	/**
+	 * Contact Details — left slides in from left, social links stagger in from right.
+	 */
+	function initContactDetails() {
+		var gsap = gs(), ST = st();
+		if (!ok(gsap, ST)) return;
+
+		var section = document.querySelector('.grosharp-contact-details');
+		if (!section) return;
+
+		var left   = section.querySelector('[data-gs-cd-left]');
+		var right  = section.querySelector('[data-gs-cd-right]');
+		var socials = section.querySelectorAll('[data-gs-cd-social]');
+
+		if (left) {
+			gsap.fromTo(left,
+				{ opacity: 0, x: -32 },
+				{ opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
+				  scrollTrigger: stConfig(section, { start: 'top 82%' }) }
+			);
+		}
+		if (socials.length) {
+			gsap.fromTo(socials,
+				{ opacity: 0, x: 24 },
+				{
+					opacity: 1, x: 0,
+					duration: 0.7, ease: 'power2.out',
+					stagger: 0.08,
+					scrollTrigger: stConfig(section, { start: 'top 82%' }),
+				}
+			);
+		}
 	}
 
 	/**
