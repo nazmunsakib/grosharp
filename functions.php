@@ -19,9 +19,12 @@ require_once GROSHARP_THEME_DIR . '/inc/settings-css.php';
 require_once GROSHARP_THEME_DIR . '/inc/class-nav-walkers.php';
 require_once GROSHARP_THEME_DIR . '/inc/class-menus.php';
 require_once GROSHARP_THEME_DIR . '/inc/class-shortcodes.php';
+require_once GROSHARP_THEME_DIR . '/inc/seo.php';
+require_once GROSHARP_THEME_DIR . '/inc/rankmath.php';
 
 ( new Grosharp_Menus() )->register();
 ( new Grosharp_Shortcodes() )->register();
+( new Grosharp_SEO() )->register();
 
 /* ── ACF local JSON — save + load from theme/acf-json/ ─────────────────── */
 add_filter( 'acf/settings/save_json', static function () {
