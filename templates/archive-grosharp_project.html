@@ -1,32 +1,11 @@
 <!-- wp:template-part {"slug":"header","tagName":"header"} /-->
 
-<!-- wp:group {"tagName":"main","className":"gs-section","layout":{"type":"constrained","wideSize":"1180px"}} -->
-<main class="wp-block-group gs-section">
-	<!-- wp:group {"className":"gs-container","layout":{"type":"constrained"}} -->
-	<div class="wp-block-group gs-container">
-		<!-- wp:paragraph {"className":"gs-pill"} -->
-		<p class="gs-pill">Case studies</p>
-		<!-- /wp:paragraph -->
-		<!-- wp:heading {"level":1,"style":{"typography":{"fontSize":"clamp(2.5rem, 6vw, 5rem)"}}} -->
-		<h1 class="wp-block-heading" style="font-size:clamp(2.5rem, 6vw, 5rem)">Work that moves brands forward.</h1>
-		<!-- /wp:heading -->
-		<!-- wp:query {"queryId":5,"query":{"perPage":9,"pages":0,"offset":0,"postType":"grosharp_project","order":"desc","orderBy":"date","inherit":true},"layout":{"type":"default"}} -->
-		<div class="wp-block-query">
-			<!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
-				<!-- wp:group {"className":"gs-card gs-reveal","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group gs-card gs-reveal">
-					<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"16/10","style":{"border":{"radius":"1rem"}}} /-->
-					<!-- wp:post-title {"isLink":true,"level":2,"style":{"typography":{"fontSize":"1.5rem"}}} /-->
-					<!-- wp:post-excerpt {"moreText":"View case study"} /-->
-				</div>
-				<!-- /wp:group -->
-			<!-- /wp:post-template -->
-		</div>
-		<!-- /wp:query -->
-	</div>
-	<!-- /wp:group -->
+<!-- wp:group {"tagName":"main","layout":{"type":"default"}} -->
+<main class="wp-block-group">
+	<!-- wp:grosharp/page-hero {"align":"full","eyebrow":"Case Studies","heading":"Work that moves","headingAccent":"brands forward.","text":"A curated selection of projects where strategy, design, and engineering came together to deliver real results."} /-->
+	<!-- wp:grosharp/work-grid {"align":"full","eyebrow":"","heading":"","text":"","showFilter":true} /-->
+	<!-- wp:grosharp/testimonials {"align":"full"} /-->
 </main>
 <!-- /wp:group -->
 
 <!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
-

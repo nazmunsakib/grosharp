@@ -68,6 +68,7 @@ final class Grosharp_Shortcodes {
 		add_shortcode( 'grosharp_header_cta',         array( $this, 'shortcode_header_cta' ) );
 		add_shortcode( 'grosharp_footer_tagline_cta', array( $this, 'shortcode_footer_tagline_cta' ) );
 		add_shortcode( 'grosharp_footer_social',      array( $this, 'shortcode_footer_social' ) );
+		add_shortcode( 'grosharp_copyright',          array( $this, 'shortcode_copyright' ) );
 	}
 
 	/* ── Shortcode callbacks ────────────────────────────────────────────── */
@@ -182,6 +183,26 @@ final class Grosharp_Shortcodes {
 		$out .= '</div>';
 
 		return $has_any ? $out : '';
+	}
+
+	/**
+	 * [grosharp_copyright]
+	 *
+	 * Dynamic copyright line: © {year} {company_name}. All rights reserved.
+	 * Year is always current; company name falls back to the site title.
+	 *
+	 * @return string
+	 */
+	public function shortcode_copyright(): string {
+		$gs   = $this->settings();
+		$name = esc_html( $gs['company_name'] ?? get_bloginfo( 'name' ) );
+		$year = date( 'Y' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
+		return sprintf(
+			'<p class="m-0 font-body text-[16px] text-white/35">&copy; %s %s. All rights reserved.</p>',
+			esc_html( $year ),
+			$name
+		);
 	}
 
 	/* ── Private helpers ────────────────────────────────────────────────── */
