@@ -395,20 +395,20 @@ body.gs-menu-open {
 /* ── Hero — override block padding; must clear absolute header ── */
 /* Header height ≈ 80px → give hero ≥ 96px top padding on mobile */
 .grosharp-hero {
-	padding-top: 6rem !important;
+	padding-top: 10rem !important;
 	padding-bottom: 2rem !important;
 }
 
 @media (min-width: 768px) {
 	.grosharp-hero {
-		padding-top: 7rem !important;
+		padding-top: 8rem !important;
 		padding-bottom: 2rem !important;
 	}
 }
 
 @media (min-width: 1024px) {
 	.grosharp-hero {
-		padding-top: 8rem !important;
+		padding-top: 10rem !important;
 		padding-bottom: 2rem !important;
 	}
 }
