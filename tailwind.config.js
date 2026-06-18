@@ -24,6 +24,7 @@ module.exports = {
 					muted: 'var(--grosharp-muted)',
 					surface: 'var(--grosharp-surface)',
 					soft: 'var(--grosharp-soft)',
+					subtle: 'var(--grosharp-subtle)',
 					violet: 'var(--grosharp-violet)',
 					'violet-soft': 'var(--grosharp-violet-soft)',
 					'violet-glow': 'var(--grosharp-violet-glow)'

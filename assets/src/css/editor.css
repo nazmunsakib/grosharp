@@ -6,7 +6,7 @@
    These mirror the defaults in settings-css.php. The dynamic values are
    injected via admin_head in settings-css.php, which overrides these.        */
 :root {
-	--grosharp-primary:      #654cff;
+	--grosharp-primary:      #654cff; /* default — overridden by settings-css.php */
 	--grosharp-accent:       #22C55E;
 	--grosharp-dark:         #0d0d12;
 	--grosharp-ink:          #111827;

@@ -90,12 +90,63 @@
 		@apply inline-flex items-center gap-2 rounded-control border border-black/[0.08] bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-brand-dark shadow-sm;
 	}
 
+	/* ── Canonical eyebrow pill — used across ALL sections ── */
+	.gs-eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		border-radius: 999px;
+		border: 1px solid var(--grosharp-violet-15);
+		background: var(--grosharp-violet-05);
+		padding: 0.375rem 1rem;
+		font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--grosharp-primary);
+		width: fit-content;
+		margin: 0;
+	}
+
+
+	/* ── Hero buttons: secondary color on hover ── */
+	.gs-hero-btn-primary:hover {
+		background: var(--grosharp-secondary);
+		box-shadow: 0 8px 24px var(--grosharp-secondary-38);
+	}
+	.gs-hero-btn-secondary:hover {
+		background: var(--grosharp-secondary);
+		border-color: var(--grosharp-secondary);
+		color: #fff;
+	}
+
+	/* ── Ghost button: brand primary border+text, secondary hover bg ── */
+	.gs-btn-brand {
+		border: 1px solid var(--grosharp-primary);
+		color: var(--grosharp-primary);
+		background: transparent;
+	}
+	.gs-btn-brand:hover {
+		background: var(--grosharp-secondary);
+		border-color: var(--grosharp-secondary);
+		color: #fff;
+	}
+	.gs-btn-brand__icon {
+		background: var(--grosharp-primary);
+		color: #fff;
+		transition: background 0.2s;
+	}
+	.gs-btn-brand:hover .gs-btn-brand__icon {
+		background: rgba(255,255,255,0.25);
+	}
+
 	.gs-button-primary {
-		@apply inline-flex min-h-[52px] items-center justify-center rounded-control bg-brand-violet px-7 py-3 font-body text-[15px] font-semibold text-white no-underline shadow-[0_18px_48px_rgba(101,76,255,0.38),inset_0_-2px_0_rgba(0,0,0,0.14)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_24px_60px_rgba(101,76,255,0.45)];
+		@apply inline-flex min-h-[52px] items-center justify-center rounded-control bg-brand-violet px-7 py-3 font-body text-[15px] font-semibold text-white no-underline shadow-[0_18px_48px_var(--grosharp-violet-38),inset_0_-2px_0_rgba(0,0,0,0.14)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_24px_60px_var(--grosharp-violet-45)];
 	}
 
 	.gs-button-secondary {
-		@apply inline-flex min-h-[52px] items-center justify-center rounded-control border border-black/[0.08] bg-white/80 px-7 py-3 font-body text-[15px] font-semibold text-brand-dark no-underline shadow-[0_4px_20px_rgba(101,76,255,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-violet/30 hover:bg-white hover:shadow-[0_8px_32px_rgba(101,76,255,0.12)];
+		@apply inline-flex min-h-[52px] items-center justify-center rounded-control border border-black/[0.08] bg-white/80 px-7 py-3 font-body text-[15px] font-semibold text-brand-dark no-underline shadow-[0_4px_20px_var(--grosharp-violet-06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--grosharp-violet-32)] hover:bg-white hover:shadow-[0_8px_32px_var(--grosharp-violet-12)];
 	}
 
 	.gs-card {
@@ -111,13 +162,11 @@
 		@apply mx-auto mb-12 max-w-3xl text-center;
 	}
 
-	.grosharp-section-header h2,
-	.grosharp-cta__inner h2 {
+	.grosharp-section-header h2 {
 		@apply text-4xl md:text-6xl;
 	}
 
-	.grosharp-section-header p,
-	.grosharp-cta__inner p {
+	.grosharp-section-header p {
 		@apply text-lg text-brand-muted;
 	}
 
@@ -157,8 +206,18 @@
 		@apply cursor-pointer text-lg font-extrabold text-brand-dark;
 	}
 
-	.grosharp-cta__inner {
-		@apply text-center;
+	/* CTA band — section provides vertical spacing; container constrains width */
+	.grosharp-cta {
+		@apply pb-10 pt-0;
+	}
+
+	/* The dark rounded card — sits inside gs-container, border-radius on all sides */
+	.grosharp-cta-card {
+		position: relative;
+		overflow: hidden;
+		border-radius: 1.25rem;
+		background: var(--grosharp-primary);
+		padding: clamp(2.5rem, 5vw, 3.5rem) clamp(2rem, 4vw, 3.5rem);
 	}
 
 	/* Header CTA button — compact size, overrides gs-button-primary defaults */
@@ -291,7 +350,7 @@ body.gs-menu-open {
 	font-weight: 800;
 	letter-spacing: -0.025em;
 	line-height: 1.2;
-	color: #0d0d12;
+	color: var(--grosharp-dark);
 	text-decoration: none;
 	padding: 0.75rem 0;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.07);
@@ -299,7 +358,7 @@ body.gs-menu-open {
 }
 
 .gs-mobile-nav-link:hover {
-	color: #654cff;
+	color: var(--grosharp-violet);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -337,20 +396,20 @@ body.gs-menu-open {
 /* Header height ≈ 80px → give hero ≥ 96px top padding on mobile */
 .grosharp-hero {
 	padding-top: 6rem !important;
-	padding-bottom: 30px !important;
+	padding-bottom: 2rem !important;
 }
 
 @media (min-width: 768px) {
 	.grosharp-hero {
 		padding-top: 7rem !important;
-		padding-bottom: 30px !important;
+		padding-bottom: 2rem !important;
 	}
 }
 
 @media (min-width: 1024px) {
 	.grosharp-hero {
 		padding-top: 8rem !important;
-		padding-bottom: 30px !important;
+		padding-bottom: 2rem !important;
 	}
 }
 
@@ -375,7 +434,7 @@ body.gs-menu-open {
 	position: absolute;
 	inset: 0;
 	border-radius: 9999px;
-	border: 2px solid rgba(101, 76, 255, 0.5);
+	border: 2px solid var(--grosharp-violet-50);
 	animation: gs-ring-pulse 1s ease-out infinite;
 }
 .gs-proj-icon { position: relative; }
@@ -433,6 +492,11 @@ body.gs-menu-open {
 	}
 }
 
+/* ── Contact methods: extra top padding ── */
+.grosharp-contact-methods {
+	padding-top: 50px;
+}
+
 /* ── Contact section: full-width on mobile ── */
 @media (max-width: 767px) {
 	.grosharp-contact .gs-contact-card {
@@ -467,7 +531,7 @@ body.gs-menu-open {
 	border-radius: 9999px;
 	border: 1px solid rgba(0, 0, 0, 0.09);
 	background: rgba(255, 255, 255, 0.80);
-	box-shadow: 0 8px 32px rgba(101, 76, 255, 0.09);
+	box-shadow: 0 8px 32px var(--grosharp-violet-09);
 	backdrop-filter: blur(24px);
 	-webkit-backdrop-filter: blur(24px);
 }
@@ -544,7 +608,7 @@ body.gs-menu-open {
 		0 0 0 1px rgba(13, 13, 18, 0.07),
 		0 4px 8px rgba(0, 0, 0, 0.03),
 		0 24px 56px rgba(0, 0, 0, 0.09),
-		0 48px 80px rgba(101, 76, 255, 0.06);
+		0 48px 80px var(--grosharp-violet-06);
 	overflow: hidden;
 	visibility: hidden;
 	pointer-events: none;
@@ -557,7 +621,7 @@ body.gs-menu-open {
 	position: absolute;
 	inset: 0 0 auto 0;
 	height: 2px;
-	background: linear-gradient(90deg, transparent 0%, #654cff 35%, #c084fc 65%, transparent 100%);
+	background: linear-gradient(90deg, transparent 0%, var(--grosharp-violet) 35%, #c084fc 65%, transparent 100%);
 	opacity: 0.45;
 	pointer-events: none;
 }
@@ -594,7 +658,7 @@ body.gs-menu-open {
 	font-weight: 700;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	color: #9a9ab0;
+	color: var(--grosharp-subtle);
 	margin: 0;
 }
 
@@ -602,7 +666,7 @@ body.gs-menu-open {
 	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
 	font-size: 0.8rem;
 	font-weight: 600;
-	color: #654cff;
+	color: var(--grosharp-violet);
 	text-decoration: none;
 	display: inline-flex;
 	align-items: center;
@@ -626,7 +690,7 @@ body.gs-menu-open {
 
 .gs-mega-nav-item:hover,
 .gs-mega-nav-item.is-active {
-	background: rgba(101, 76, 255, 0.06);
+	background: var(--grosharp-violet-06);
 }
 
 .gs-mega-nav-dot {
@@ -634,7 +698,7 @@ body.gs-menu-open {
 	width: 6px;
 	height: 6px;
 	border-radius: 50%;
-	background: rgba(101, 76, 255, 0.28);
+	background: var(--grosharp-violet-28);
 	transition:
 		background 0.15s,
 		transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
@@ -642,7 +706,7 @@ body.gs-menu-open {
 
 .gs-mega-nav-item:hover .gs-mega-nav-dot,
 .gs-mega-nav-item.is-active .gs-mega-nav-dot {
-	background: #654cff;
+	background: var(--grosharp-violet);
 	transform: scale(1.5);
 }
 
@@ -658,13 +722,13 @@ body.gs-menu-open {
 
 .gs-mega-nav-item:hover .gs-mega-nav-title,
 .gs-mega-nav-item.is-active .gs-mega-nav-title {
-	color: #0d0d12;
+	color: var(--grosharp-dark);
 	font-weight: 600;
 }
 
 .gs-mega-nav-arrow {
 	flex-shrink: 0;
-	color: #654cff;
+	color: var(--grosharp-violet);
 	opacity: 0;
 	transform: translateX(-6px);
 	transition:
@@ -757,8 +821,8 @@ body.gs-menu-open {
 	font-weight: 700;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	color: #654cff;
-	background: rgba(101, 76, 255, 0.09);
+	color: var(--grosharp-violet);
+	background: var(--grosharp-violet-09);
 	border-radius: 9999px;
 	padding: 0.2rem 0.6rem;
 	margin: 0;
@@ -770,20 +834,20 @@ body.gs-menu-open {
 	font-size: 1.0625rem;
 	font-weight: 700;
 	line-height: 1.3;
-	color: #0d0d12;
+	color: var(--grosharp-dark);
 	text-decoration: none;
 	display: block;
 	transition: color 0.15s;
 }
 
-.gs-mega-preview-title:hover { color: #654cff; }
+.gs-mega-preview-title:hover { color: var(--grosharp-violet); }
 
 /* Description / detail text */
 .gs-mega-preview-desc {
 	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
 	font-size: 0.8125rem;
 	line-height: 1.65;
-	color: #5c5d6d;
+	color: var(--grosharp-muted);
 	margin: 0;
 	display: -webkit-box;
 	-webkit-line-clamp: 3;
@@ -800,7 +864,7 @@ body.gs-menu-open {
 	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
 	font-size: 0.875rem;
 	font-weight: 600;
-	color: #654cff;
+	color: var(--grosharp-violet);
 	text-decoration: none;
 	transition: gap 0.2s ease;
 }
@@ -858,8 +922,8 @@ body.gs-menu-open {
 
 .gs-simple-dropdown-link:hover,
 .gs-simple-dropdown-link.is-active {
-	background: rgba(101, 76, 255, 0.06);
-	color: #0d0d12;
+	background: var(--grosharp-violet-06);
+	color: var(--grosharp-dark);
 	font-weight: 600;
 }
 
@@ -898,7 +962,7 @@ body.gs-menu-open {
 /* ── About Hero ─────────────────────────────────────────────────────────── */
 .grosharp-about-hero {
 	position: relative;
-	background: #0d0d12;
+	background: var(--grosharp-dark);
 	overflow: hidden;
 }
 
@@ -907,7 +971,7 @@ body.gs-menu-open {
 	content: '';
 	position: absolute;
 	inset: 0;
-	background: radial-gradient(ellipse 70% 60% at 0% 0%, rgba(101,76,255,0.18), transparent 65%);
+	background: radial-gradient(ellipse 70% 60% at 0% 0%, var(--grosharp-violet-18), transparent 65%);
 	pointer-events: none;
 }
 
@@ -931,13 +995,13 @@ body.gs-menu-open {
 	width: 6px;
 	height: 6px;
 	border-radius: 50%;
-	background: #654cff;
+	background: var(--grosharp-violet);
 }
 
 .about-hero-heading {
 	font-family: var(--grosharp-font-heading, 'Plus Jakarta Sans', sans-serif);
 	font-size: clamp(2.5rem, 6vw, 5.25rem);
-	font-weight: 800;
+	font-weight: 700;
 	line-height: 1.04;
 	letter-spacing: -0.04em;
 	color: #ffffff;
@@ -958,7 +1022,7 @@ body.gs-menu-open {
 	min-height: 48px;
 	padding: 0 1.5rem;
 	border-radius: 9999px;
-	background: #654cff;
+	background: var(--grosharp-violet);
 	color: #fff;
 	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
 	font-size: 0.9375rem;
@@ -968,7 +1032,7 @@ body.gs-menu-open {
 }
 .about-hero-cta-primary:hover {
 	background: #7c66ff;
-	box-shadow: 0 12px 32px rgba(101,76,255,0.4);
+	box-shadow: 0 12px 32px var(--grosharp-violet-40);
 	transform: translateY(-1px);
 }
 
@@ -1031,9 +1095,317 @@ body.gs-menu-open {
 	.about-hero-stats { gap: 1.25rem; }
 }
 
+/* ── Page Hero ───────────────────────────────────────────────────────────
+   General-purpose editorial hero — About, Work, Contact, Services pages.
+   Layout: stacked text + media on mobile; two-column (60/40) on desktop.
+   ─────────────────────────────────────────────────────────────────────── */
+.grosharp-page-hero {
+	padding-top: clamp(7rem, 12vw, 10rem);
+	padding-bottom: 2rem;
+	background: #ffffff;
+	overflow: hidden;
+}
+
+/* Always stacked: text on top, media below */
+.grosharp-page-hero .gs-container {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(2.5rem, 5vw, 4rem);
+}
+
+/* ── Text area ── */
+.ph-text-area {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+/* ── Eyebrow — alias of .gs-eyebrow ── */
+.ph-eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	border-radius: 999px;
+	border: 1px solid var(--grosharp-violet-15);
+	background: var(--grosharp-violet-05);
+	padding: 0.375rem 1rem;
+	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--grosharp-primary);
+	width: fit-content;
+	margin: 0;
+}
+
+/* ── Heading ── */
+.ph-heading {
+	font-family: var(--grosharp-font-heading, 'Plus Jakarta Sans', sans-serif);
+	font-size: clamp(2.25rem, 5vw, 4rem);
+	font-weight: 700;
+	line-height: 1.05;
+	letter-spacing: -0.035em;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.15em;
+}
+
+.ph-heading-dark {
+	color: var(--grosharp-dark);
+	display: block;
+}
+
+.ph-heading-accent {
+	color: var(--grosharp-violet);
+	display: block;
+}
+
+/* ── Subtext ── */
+.ph-sub {
+	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
+	font-size: clamp(1rem, 1.5vw, 1.25rem);
+	line-height: 1.7;
+	color: var(--grosharp-muted);
+	margin: 0;
+	max-width: 52ch;
+}
+
+/* ── Media area ── */
+.ph-media {
+	display: grid;
+	gap: 1rem;
+	align-items: start;
+}
+
+.ph-media--single {
+	grid-template-columns: 1fr;
+}
+
+.ph-media--double {
+	grid-template-columns: 1fr 1fr;
+	align-items: end;
+}
+
+/* Offset the second image downward for editorial depth */
+.ph-media--double .ph-media-item:last-child {
+	transform: translateY(2rem);
+}
+
+.ph-media-item {
+	margin: 0;
+	overflow: hidden;
+	border-radius: 1.25rem;
+	box-shadow: 0 24px 60px var(--grosharp-violet-12);
+}
+
+.ph-media-item img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.ph-media--single .ph-media-item {
+	aspect-ratio: 16 / 7;
+}
+
+.ph-media--double .ph-media-item {
+	aspect-ratio: 4 / 3;
+}
+
+/* Collapse double media to single column on small mobile */
+@media (max-width: 479px) {
+	.ph-media--double {
+		grid-template-columns: 1fr;
+	}
+	.ph-media--double .ph-media-item:last-child {
+		transform: none;
+	}
+	.ph-media--double .ph-media-item {
+		aspect-ratio: 16 / 9;
+	}
+}
+
+/* Text-only hero: full container width */
+.grosharp-page-hero.has-no-media .gs-container {
+	grid-template-columns: 1fr;
+}
+
+/* ── About Story ─────────────────────────────────────────────────────────
+   Two-column layout: sticky pulled quote (left) + narrative text (right).
+   ─────────────────────────────────────────────────────────────────────── */
+.grosharp-about-story {
+	padding-bottom: 2rem;
+}
+
+.grosharp-about-story > .gs-container > .gs-eyebrow {
+	margin-bottom: 2.5rem;
+}
+
+.about-story-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: clamp(2.5rem, 5vw, 4rem);
+}
+
+@media (min-width: 1024px) {
+	.about-story-grid {
+		grid-template-columns: 5fr 7fr;
+		gap: clamp(3rem, 6vw, 6rem);
+		align-items: start;
+	}
+	.about-story-left {
+		position: sticky;
+		top: 6rem;
+	}
+}
+
+.about-story-quote-wrap {
+	position: relative;
+	padding: 2rem 2rem 2rem 2.5rem;
+	border-left: 3px solid var(--grosharp-violet);
+	background: var(--grosharp-violet-05);
+	border-radius: 0 1rem 1rem 0;
+}
+
+.about-story-quote-mark {
+	display: block;
+	font-family: Georgia, serif;
+	font-size: 5rem;
+	line-height: 0.8;
+	color: var(--grosharp-violet-25);
+	margin-bottom: 0.75rem;
+	user-select: none;
+}
+
+.about-story-quote {
+	font-family: var(--grosharp-font-heading, 'Plus Jakarta Sans', sans-serif);
+	font-size: clamp(1.125rem, 2vw, 1.5rem);
+	font-weight: 700;
+	line-height: 1.4;
+	letter-spacing: -0.02em;
+	color: var(--grosharp-dark);
+	margin: 0;
+	quotes: none;
+}
+
+.about-story-right {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.about-story-p {
+	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
+	font-size: clamp(1rem, 1.25vw, 1.125rem);
+	line-height: 1.8;
+	color: var(--grosharp-muted);
+	margin: 0;
+}
+
+/* ── About Values ────────────────────────────────────────────────────────
+   Light off-white section with editorial header + 3-column value cards.
+   ─────────────────────────────────────────────────────────────────────── */
+.grosharp-about-values {
+	background: var(--grosharp-surface, #FAFAF9);
+}
+
+.about-values-header {
+	max-width: 680px;
+	margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.about-values-heading {
+	font-family: var(--grosharp-font-heading, 'Plus Jakarta Sans', sans-serif);
+	font-size: clamp(2rem, 4vw, 3.375rem);
+	font-weight: 800;
+	line-height: 1.1;
+	letter-spacing: -0.035em;
+	color: var(--grosharp-dark);
+}
+
+.about-values-sub {
+	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
+	font-size: 1.25rem;
+	line-height: 1.7;
+	color: var(--grosharp-muted);
+	max-width: 56ch;
+}
+
+.about-values-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+	.about-values-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+.about-value-card {
+	position: relative;
+	background: #ffffff;
+	border: 1px solid rgba(13, 13, 18, 0.07);
+	border-radius: 1.5rem;
+	padding: clamp(1.5rem, 3vw, 2.25rem);
+	transition: box-shadow 0.3s, transform 0.3s;
+	overflow: hidden;
+}
+
+.about-value-card:hover {
+	box-shadow: 0 20px 60px var(--grosharp-violet-10);
+	transform: translateY(-4px);
+}
+
+.about-value-number {
+	position: absolute;
+	top: -0.25rem;
+	right: 0.75rem;
+	font-family: var(--grosharp-font-heading, 'Plus Jakarta Sans', sans-serif);
+	font-size: clamp(4.5rem, 9vw, 7rem);
+	font-weight: 900;
+	line-height: 1;
+	letter-spacing: -0.05em;
+	color: var(--grosharp-violet-05);
+	pointer-events: none;
+	user-select: none;
+}
+
+.about-value-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 0.875rem;
+	background: var(--grosharp-violet-08);
+	color: var(--grosharp-violet);
+}
+
+.about-value-title {
+	font-family: var(--grosharp-font-heading, 'Plus Jakarta Sans', sans-serif);
+	font-size: 1.125rem;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	color: var(--grosharp-dark);
+	margin: 1.25rem 0 0;
+}
+
+.about-value-desc {
+	font-family: var(--grosharp-font-body, 'DM Sans', sans-serif);
+	font-size: 0.9375rem;
+	line-height: 1.7;
+	color: var(--grosharp-muted);
+	margin: 0.75rem 0 0;
+}
+
 /* ── Work Grid: JS-toggled states only ─────────────────────────────────── */
 .wg-card--hidden { display: none; }
-.wg-filter-btn.is-active { background: #654cff; border-color: #654cff; color: #ffffff; }
+.wg-filter-btn.is-active { background: var(--grosharp-violet); border-color: var(--grosharp-violet); color: #ffffff; }
 
 /* ── Single post: 2-col layout (TOC sidebar + content) ─────────────────────
    .gs-post-body creates a sticky-sidebar layout on desktop.
@@ -1075,7 +1447,7 @@ body.gs-menu-open {
 	border: 1px solid rgba(13, 13, 18, 0.08);
 	border-radius: 1rem;
 	padding: 1.25rem 1.25rem 1.5rem;
-	box-shadow: 0 4px 20px rgba(101, 76, 255, 0.05);
+	box-shadow: 0 4px 20px var(--grosharp-violet-05);
 }
 
 .gs-toc-title {
@@ -1084,7 +1456,7 @@ body.gs-menu-open {
 	font-weight: 700;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	color: #9a9ab0;
+	color: var(--grosharp-subtle);
 	margin: 0 0 0.875rem;
 }
 
@@ -1107,7 +1479,7 @@ body.gs-menu-open {
 }
 
 .gs-toc-item.is-active {
-	border-left-color: #654cff;
+	border-left-color: var(--grosharp-violet);
 }
 
 .gs-toc-link {
@@ -1121,7 +1493,7 @@ body.gs-menu-open {
 }
 
 .gs-toc-link:hover {
-	background: rgba(101, 76, 255, 0.05);
+	background: var(--grosharp-violet-05);
 }
 
 .gs-toc-num {
@@ -1139,24 +1511,24 @@ body.gs-menu-open {
 	font-size: 0.8125rem;
 	font-weight: 500;
 	line-height: 1.5;
-	color: #5c5d6d;
+	color: var(--grosharp-muted);
 	transition: color 0.2s;
 }
 
 .gs-toc-item.is-active .gs-toc-num,
 .gs-toc-link:hover .gs-toc-num {
-	color: #654cff;
+	color: var(--grosharp-violet);
 }
 
 .gs-toc-item.is-active .gs-toc-text,
 .gs-toc-link:hover .gs-toc-text {
-	color: #654cff;
+	color: var(--grosharp-violet);
 	font-weight: 600;
 }
 
 .gs-toc-item--sub .gs-toc-text {
 	font-size: 0.75rem;
-	color: #9a9ab0;
+	color: var(--grosharp-subtle);
 }
 
 /* ── Post content body group padding ───────────────────────────────────────
@@ -1197,7 +1569,7 @@ body.gs-menu-open {
 		font-weight: 700;
 		line-height: 1.15;
 		letter-spacing: -0.03em;
-		color: #0d0d12;
+		color: var(--grosharp-dark);
 		margin-top: 2.25rem;
 		margin-bottom: 0.75rem;
 	}
@@ -1214,15 +1586,15 @@ body.gs-menu-open {
 
 	/* ── Links ───────────────────────────────────────────────────────── */
 	& a {
-		color: #654cff;
+		color: var(--grosharp-violet);
 		text-decoration: underline;
-		text-decoration-color: rgba(101, 76, 255, 0.35);
+		text-decoration-color: var(--grosharp-violet-35);
 		text-underline-offset: 3px;
 		transition: color 0.2s, text-decoration-color 0.2s;
 	}
 	& a:hover {
 		color: #4f3bcc;
-		text-decoration-color: #654cff;
+		text-decoration-color: var(--grosharp-violet);
 	}
 
 	/* ── Lists ───────────────────────────────────────────────────────── */
@@ -1240,28 +1612,28 @@ body.gs-menu-open {
 		color: #3d3e4e;
 		margin-bottom: 0.4rem;
 	}
-	& li::marker { color: #654cff; }
+	& li::marker { color: var(--grosharp-violet); }
 	& ul ul, & ol ol, & ul ol, & ol ul {
 		margin-top: 0.4rem;
 		margin-bottom: 0.4rem;
 	}
 
 	/* ── Strong / em ─────────────────────────────────────────────────── */
-	& strong, & b { font-weight: 600; color: #0d0d12; }
+	& strong, & b { font-weight: 600; color: var(--grosharp-dark); }
 	& em, & i { font-style: italic; }
 
 	/* ── Blockquote ──────────────────────────────────────────────────── */
 	& blockquote {
 		margin: 2rem 0;
 		padding: 1.25rem 1.5rem;
-		border-left: 3px solid #654cff;
-		background: rgba(101, 76, 255, 0.04);
+		border-left: 3px solid var(--grosharp-violet);
+		background: var(--grosharp-violet-05);
 		border-radius: 0 0.75rem 0.75rem 0;
 	}
 	& blockquote p {
 		font-size: 1.125rem;
 		line-height: 1.7;
-		color: #0d0d12;
+		color: var(--grosharp-dark);
 		font-style: italic;
 		margin-bottom: 0;
 	}
@@ -1280,15 +1652,15 @@ body.gs-menu-open {
 	& code {
 		font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 		font-size: 0.875em;
-		background: rgba(101, 76, 255, 0.06);
-		color: #654cff;
+		background: var(--grosharp-violet-06);
+		color: var(--grosharp-violet);
 		padding: 0.15em 0.45em;
 		border-radius: 0.3rem;
 	}
 	& pre {
 		margin: 1.75rem 0;
 		padding: 1.5rem;
-		background: #0d0d12;
+		background: var(--grosharp-dark);
 		border-radius: 0.75rem;
 		overflow-x: auto;
 	}
@@ -1363,8 +1735,8 @@ body.gs-menu-open {
 	}
 
 	& .wp-block-pullquote {
-		border-top: 3px solid #654cff;
-		border-bottom: 3px solid #654cff;
+		border-top: 3px solid var(--grosharp-violet);
+		border-bottom: 3px solid var(--grosharp-violet);
 		padding: 1.5rem 0;
 		margin: 2.5rem 0;
 	}
@@ -1380,7 +1752,7 @@ body.gs-menu-open {
 		font-weight: 600;
 		font-style: normal;
 		letter-spacing: -0.02em;
-		color: #0d0d12;
+		color: var(--grosharp-dark);
 		text-align: center;
 	}
 

@@ -124,7 +124,7 @@ final class Grosharp_Shortcodes {
 
 		return sprintf(
 			'<div class="hidden md:flex">'
-			. '<a href="%s" class="inline-flex min-h-[45px] items-center rounded-full bg-brand-dark px-5 font-body text-[14px] font-semibold text-white no-underline transition-all duration-200 hover:opacity-90">%s</a>'
+			. '<a href="%s" class="inline-flex min-h-[45px] items-center rounded-full px-5 font-body text-[14px] font-semibold text-white no-underline transition-all duration-200 hover:opacity-90" style="background:var(--grosharp-secondary);">%s</a>'
 			. '</div>',
 			$url,
 			$label
@@ -146,7 +146,7 @@ final class Grosharp_Shortcodes {
 
 		return sprintf(
 			'<p class="max-w-[400px] font-body text-base leading-relaxed text-white/50">%s</p>'
-			. '<a href="%s" class="mt-9 inline-flex min-h-[52px] items-center rounded-full border border-white/20 px-8 font-body text-[16px] font-semibold text-white no-underline transition-all duration-200 hover:border-white/50 hover:bg-white/[0.06]">%s</a>',
+			. '<a href="%s" class="gs-btn-brand mt-9 inline-flex min-h-[52px] items-center rounded-full px-8 font-body text-[16px] font-semibold no-underline transition-all duration-200 hover:-translate-y-0.5">%s</a>',
 			$text,
 			$url,
 			$label

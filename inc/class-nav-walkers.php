@@ -62,9 +62,9 @@ class Grosharp_Primary_Nav_Walker extends Walker_Nav_Menu {
 	private function placeholder_img(): string {
 		return '<div class="gs-mega-preview-placeholder">'
 			. '<svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">'
-			. '<rect width="56" height="56" rx="16" fill="rgba(101,76,255,0.1)"/>'
-			. '<path d="M14 42l10-13 7 9 6-7 9 11H14z" fill="#654cff" opacity="0.35"/>'
-			. '<circle cx="36" cy="20" r="5" fill="#654cff" opacity="0.5"/>'
+			. '<rect width="56" height="56" rx="16" fill="var(--grosharp-violet-10)"/>'
+			. '<path d="M14 42l10-13 7 9 6-7 9 11H14z" fill="var(--grosharp-violet)" opacity="0.35"/>'
+			. '<circle cx="36" cy="20" r="5" fill="var(--grosharp-violet)" opacity="0.5"/>'
 			. '</svg>'
 			. '</div>';
 	}
@@ -193,7 +193,7 @@ class Grosharp_Primary_Nav_Walker extends Walker_Nav_Menu {
 
 		/* ── Depth 0 — top-level nav items ─────────────────────────── */
 		if ( $depth === 0 ) {
-			$color = $is_current ? 'text-[#654cff]' : 'text-brand-dark hover:text-brand-primary';
+			$color = $is_current ? 'text-brand-violet' : 'text-brand-dark hover:text-brand-primary';
 
 			/* Detect Services auto-mode: matches CPT archive URL or custom class */
 			$archive_link = (string) get_post_type_archive_link( 'grosharp_service' );

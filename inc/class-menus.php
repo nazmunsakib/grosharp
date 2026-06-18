@@ -76,7 +76,7 @@ final class Grosharp_Menus {
 			. $links
 			. '</nav>'
 			. '<button id="gs-menu-open" '
-			. 'class="lg:hidden flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.09] bg-white/60 text-[#0d0d12] transition-colors hover:bg-white" '
+			. 'class="lg:hidden flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.09] bg-white/60 text-brand-dark transition-colors hover:bg-white" '
 			. 'aria-label="Open menu" aria-expanded="false" aria-controls="gs-mobile-menu">'
 			. $ham
 			. '</button>';
@@ -171,7 +171,7 @@ final class Grosharp_Menus {
 								$output .= '<div class="gs-mob-dropdown-item border-b border-black/[0.07]">';
 								$output .= '<div class="flex items-center justify-between">';
 								$output .= sprintf( '<a href="%s" class="gs-mobile-nav-link border-b-0 flex-1">%s</a>', esc_url( $url ), esc_html( $title ) );
-								$output .= '<button class="gs-mob-dropdown-toggle flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#f4f3ff] transition-colors" aria-expanded="false" aria-controls="' . esc_attr( $list_id ) . '">'
+								$output .= '<button class="gs-mob-dropdown-toggle flex items-center justify-center w-10 h-10 rounded-full hover:bg-brand-soft transition-colors" aria-expanded="false" aria-controls="' . esc_attr( $list_id ) . '">'
 									. $chevron . '</button>';
 								$output .= '</div>';
 								$output .= '<ul class="gs-mob-dropdown-list" id="' . esc_attr( $list_id ) . '" aria-hidden="true">';
@@ -182,8 +182,8 @@ final class Grosharp_Menus {
 							}
 						} elseif ( $depth === 1 ) {
 							$output .= sprintf(
-								'<li><a href="%s" class="flex items-center gap-3 py-2.5 font-body text-[1rem] font-medium text-[#3a3a4c] no-underline hover:text-[#654cff] transition-colors">'
-								. '<span class="inline-block w-1.5 h-1.5 rounded-full bg-[rgba(101,76,255,0.4)] flex-none"></span>%s</a></li>',
+								'<li><a href="%s" class="flex items-center gap-3 py-2.5 font-body text-[1rem] font-medium text-brand-ink no-underline hover:text-brand-violet transition-colors">'
+								. '<span class="inline-block w-1.5 h-1.5 rounded-full bg-[var(--grosharp-violet-40)] flex-none"></span>%s</a></li>',
 								esc_url( $url ),
 								esc_html( $title )
 							);
@@ -228,7 +228,7 @@ final class Grosharp_Menus {
 			. '<div class="flex items-center justify-between px-6 py-4 border-b border-black/[0.07]">'
 			. $brand
 			. '<button id="gs-menu-close" '
-			. 'class="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.09] text-[#0d0d12] transition-colors hover:bg-[#f4f3ff]" '
+			. 'class="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.09] text-brand-dark transition-colors hover:bg-brand-soft" '
 			. 'aria-label="Close menu">' . $close . '</button>'
 			. '</div>'
 
@@ -240,7 +240,7 @@ final class Grosharp_Menus {
 			// CTA
 			. '<div class="px-6 pt-6 pb-10">'
 			. '<a href="' . $cta_url . '" '
-			. 'class="flex w-full min-h-[52px] items-center justify-center rounded-full bg-[#654cff] font-body text-[16px] font-semibold text-white no-underline shadow-[0_18px_48px_rgba(101,76,255,0.38)] transition-opacity duration-200 hover:opacity-90">'
+			. 'class="flex w-full min-h-[52px] items-center justify-center rounded-full bg-brand-violet font-body text-[16px] font-semibold text-white no-underline shadow-[0_18px_48px_var(--grosharp-violet-38)] transition-opacity duration-200 hover:opacity-90">'
 			. $cta_lbl
 			. '</a>'
 			. '</div>'
@@ -338,7 +338,7 @@ final class Grosharp_Menus {
 		}
 
 		return sprintf(
-			'<a href="%s" class="font-heading text-[16px] font-black text-[#0d0d12] no-underline" rel="home">%s</a>',
+			'<a href="%s" class="font-heading text-[16px] font-black text-brand-dark no-underline" rel="home">%s</a>',
 			$home_url,
 			esc_html( get_bloginfo( 'name' ) )
 		);
