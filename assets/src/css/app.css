@@ -505,6 +505,15 @@ body.gs-menu-open {
 	padding-top: 50px;
 }
 
+
+/* ── Contact card icon: brand color default, white on hover ── */
+.gs-contact-icon {
+	color: var(--grosharp-primary);
+}
+.gs-contact-card:hover .gs-contact-icon {
+	color: #fff;
+}
+
 /* ── Contact section: full-width on mobile ── */
 @media (max-width: 767px) {
 	.grosharp-contact .gs-contact-card {
