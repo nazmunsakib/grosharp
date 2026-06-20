@@ -124,7 +124,7 @@ final class Grosharp_Shortcodes {
 
 		return sprintf(
 			'<div class="hidden md:flex">'
-			. '<a href="%s" class="inline-flex min-h-[45px] items-center rounded-full px-5 font-body text-[14px] font-semibold text-white no-underline transition-all duration-200 hover:opacity-90" style="background:var(--grosharp-secondary);">%s</a>'
+			. '<a href="%s" class="gs-header-cta inline-flex min-h-[45px] items-center rounded-full px-5 font-body text-[14px] font-semibold text-white no-underline transition-all duration-200">%s</a>'
 			. '</div>',
 			$url,
 			$label
